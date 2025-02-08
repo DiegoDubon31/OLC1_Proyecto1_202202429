@@ -8,7 +8,7 @@ package Analyzer;
  *
  * @author diego
  */
-public class generator {
+public class Generator {
     public static void main(String[] args) {
         generateCompiler();
     }
@@ -21,7 +21,7 @@ public class generator {
             ruta de salida
              */
 
-            String opcFlex[] = {ruta + "lexer.jflex", "-d", ruta};
+            String opcFlex[] = {ruta + "Lexer.jflex", "-d", ruta};
             jflex.Main.generate(opcFlex);
             /*
             -destdir indica la ruta donde se generara la salida
@@ -31,8 +31,8 @@ public class generator {
             ruta del archivo cup
              */
 
-            String opcCup[] = {"-destdir", ruta, "-parser", "Sintactico", ruta + "parser.cup"};
-            java_cup.Main.main(opcCup);
+            /*String opcCup[] = {"-destdir", ruta, "-parser", "Sintactico", ruta + "parser.cup"};
+            java_cup.Main.main(opcCup);*/
         } catch (Exception e) {
             e.printStackTrace();
         }
