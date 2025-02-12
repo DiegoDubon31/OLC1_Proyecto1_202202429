@@ -31,8 +31,8 @@ public class Generator {
             ruta del archivo cup
              */
 
-            /*String opcCup[] = {"-destdir", ruta, "-parser", "Sintactico", ruta + "parser.cup"};
-            java_cup.Main.main(opcCup);*/
+            String opcCup[] = {"-destdir", ruta, "-parser", "Parser", ruta + "Parser.cup"};
+            java_cup.Main.main(opcCup);
         } catch (Exception e) {
             e.printStackTrace();
         }

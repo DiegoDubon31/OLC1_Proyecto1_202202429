@@ -1,0 +1,46 @@
+package Analyzer;
+import  java_cup.runtime.Symbol;
+
+parser code {:
+    
+    
+:}
+
+action code
+{:  :}
+
+terminal STRAT, MATCH, MAIN, INITIAL, RULES, IF, THEN, ELSE, SCORING, RUN, WITH, SEED, PLAYERS, STRATS, ROUNDS, MUTUAL;
+terminal COOPERATION, DEFECTION, BETRAYAL, REWARD, PUNISHMENT, TRUE, FALSE, AND, OR, NOT, EQUAL, INEQUAL, GREATER_THAN, LOWER_THAN;
+terminal ROUNDOPEN, ROUNDCLOSE, GET_MOVE, LAST_MOVE, GET_MOVES_COUNT, GET_LAST_N_MOVES, ROUND_NUMBER, OPPONENT_HISTORY, SELF_HISTORY, TOTAL_ROUNDS, RANDOM;     
+terminal GREATER_OR_EQUAL, LOWER_OR_EQUAL, CURLYOPEN, CURLYCLOSE, SQUAREOPEN, SQUARECLOSE, COLON, COMMA, COOPERATE, DEFECT, INTEGER, FLOAT, ID;        
+
+non terminal AST S;
+non terminal AST instructions, instruction, strategy, matches, begining; 
+non terminal AST strategyArg, decision, conditions, condition, booleanCondition; 
+
+start with S;
+
+S ::= instructions ;
+
+instructions ::= instructions instruction 
+                | instruction ;
+
+instruction ::= strategy 
+                | matches 
+                | begining ;
+
+strategy ::= STRAT ID CURLYOPEN strategyArg CURLYCLOSE ;
+
+strategyArg ::= INITIAL COLON decision
+                | RULES COLON SQUAREOPEN conditions SQUARECLOSE ;
+
+conditions ::= conditions condition 
+                | condition ;
+
+condition ::= IF booleanCondition THEN decision
+                | ELSE decision ;
+
+decision ::= COOPERATE 
+            | DEFECT ;
+
+ 
