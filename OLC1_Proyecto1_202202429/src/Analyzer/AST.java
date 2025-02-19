@@ -15,10 +15,9 @@ public class AST {
     public ArrayList<AST> childNodes;
     public Object result;
 
-    public AST(String lex, ArrayList<AST> childNodes, Object result) {
+    public AST(String lex) {
         this.lex = lex;
         this.childNodes = new ArrayList<>();
-        this.result = result;
     }
     
     public void addChild(AST child){
@@ -30,18 +29,34 @@ public class AST {
             run(child, TS);
         }
     }
-    public void printAST(AST root, String indent) {
+    
+    
+
+    public void printAST(AST root, String prefix, boolean isLast) {
         if (root == null) {
             return;
         }
-        
-        // Imprime el nodo actual con la indentación apropiada
-        System.out.println(indent + root.lex);
-        
-        // Incrementa la indentación para los hijos
-        for (AST hijo : root.childNodes) {
-            printAST(hijo, indent + "   ");
+
+        // Prefijo para los nodos
+        System.out.print(prefix);
+        if (isLast) {
+            System.out.print("+-- ");
+            prefix += "   ";
+        } else {
+            System.out.print("|-- ");
+            prefix += "|  ";
+        }
+
+        // Imprimir el nodo actual
+        System.out.println(root.lex);
+
+        // Imprimir los hijos recursivamente
+        for (int i = 0; i < root.childNodes.size(); i++) {
+            printAST(root.childNodes.get(i), prefix, i == root.childNodes.size() - 1);
         }
     }
+
+
+
     
 }
