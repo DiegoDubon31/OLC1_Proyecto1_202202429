@@ -184,6 +184,42 @@ ID = [0-9A-Za-z_]+
     Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "RESERVED WORD FALSE");
     Lists.setTokensList(t);   
     return new Symbol(sym.FALSE, yyline + 1, yycolumn + 1, yytext()); }
+<YYINITIAL> {GET_MOVE} {
+    Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "GET_MOVE");
+    Lists.setTokensList(t);   
+    return new Symbol(sym.GET_MOVE, yyline + 1, yycolumn + 1, yytext()); }
+<YYINITIAL> {LAST_MOVE} {
+    Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "LAST_MOVE");
+    Lists.setTokensList(t);   
+    return new Symbol(sym.LAST_MOVE, yyline + 1, yycolumn + 1, yytext()); }
+<YYINITIAL> {GET_MOVES_COUNT} {
+    Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "GET_MOVES_COUNT");
+    Lists.setTokensList(t);   
+    return new Symbol(sym.GET_MOVES_COUNT, yyline + 1, yycolumn + 1, yytext()); }
+<YYINITIAL> {GET_LAST_N_MOVES} {
+    Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "GET_LAST_N_MOVES");
+    Lists.setTokensList(t);   
+    return new Symbol(sym.GET_LAST_N_MOVES, yyline + 1, yycolumn + 1, yytext()); }
+<YYINITIAL> {ROUND_NUMBER} {
+    Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "ROUND_NUMBER");
+    Lists.setTokensList(t);   
+    return new Symbol(sym.ROUND_NUMBER, yyline + 1, yycolumn + 1, yytext()); }
+<YYINITIAL> {OPPONENT_HISTORY} {
+    Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "OPPONENT_HISTORY");
+    Lists.setTokensList(t);   
+    return new Symbol(sym.OPPONENT_HISTORY, yyline + 1, yycolumn + 1, yytext()); }
+<YYINITIAL> {SELF_HISTORY} {
+    Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "SELF_HISTORY");
+    Lists.setTokensList(t);   
+    return new Symbol(sym.SELF_HISTORY, yyline + 1, yycolumn + 1, yytext()); }
+<YYINITIAL> {TOTAL_ROUNDS} {
+    Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "TOTAL_ROUNDS");
+    Lists.setTokensList(t);   
+    return new Symbol(sym.TOTAL_ROUNDS, yyline + 1, yycolumn + 1, yytext()); }
+<YYINITIAL> {RANDOM} {
+    Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "RANDOM");
+    Lists.setTokensList(t);   
+    return new Symbol(sym.RANDOM, yyline + 1, yycolumn + 1, yytext()); }
 <YYINITIAL> {AND} {
     Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "AND");
     Lists.setTokensList(t);   
@@ -236,6 +272,14 @@ ID = [0-9A-Za-z_]+
     Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "CLOSE SQUARE BRACE");
     Lists.setTokensList(t);   
     return new Symbol(sym.SQUARECLOSE, yyline + 1, yycolumn + 1, yytext()); }
+<YYINITIAL> {ROUNDOPEN} {
+    Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "OPEN ROUND BRACE");
+    Lists.setTokensList(t);   
+    return new Symbol(sym.ROUNDOPEN, yyline + 1, yycolumn + 1, yytext()); }
+<YYINITIAL> {ROUNDCLOSE} {
+    Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "CLOSE ROUND BRACE");
+    Lists.setTokensList(t);   
+    return new Symbol(sym.ROUNDCLOSE, yyline + 1, yycolumn + 1, yytext()); }
 <YYINITIAL> {COLON} {
     Token t = new Token(yytext(),String.valueOf(yyline+1), String.valueOf(yycolumn+1) , "COLON");
     Lists.setTokensList(t);   

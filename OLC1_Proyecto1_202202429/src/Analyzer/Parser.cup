@@ -17,8 +17,13 @@ terminal GREATER_OR_EQUAL, LOWER_OR_EQUAL, CURLYOPEN, CURLYCLOSE, SQUAREOPEN, SQ
 
 non terminal AST S;
 non terminal AST instructions, instruction, strategy, matches, begining, matchArg, matchArgs, scoreArgs, scoreArg, beginingArgs, beginingArg; 
-non terminal AST strategyArg, strategyArgs, decision, conditions, condition, booleanCondition, booleanConditions, matchesIds, logical, state, stateInt;
-non terminal AST funcs, func, comparison, history, decisionList; 
+non terminal AST strategyArg, strategyArgs, decision, conditions, condition, booleanCondition, booleanExpression, matchesIds, logical, state;
+non terminal AST funcs, func, comparison, history, decisionList, side, actions, arg1, arg2; 
+
+precedence right NOT;  
+precedence nonassoc EQUAL, INEQUAL, LOWER_THAN, GREATER_THAN, LOWER_OR_EQUAL, GREATER_OR_EQUAL; 
+precedence left AND; 
+precedence left OR;   
 
 start with S;
 
@@ -110,8 +115,9 @@ beginingArgs ::= beginingArgs:b1 beginingArg:b2 {: AST args = new AST("MAIN_ARGS
                                                     args.addChild(b1);
                                                     RESULT = args; :} ;
 
-beginingArg ::= RUN SQUAREOPEN matchesIds:Ids SQUARECLOSE WITH CURLYOPEN SEED COLON INTEGER:s CURLYCLOSE {:AST run = new AST("RUN");
+beginingArg ::= RUN SQUAREOPEN matchesIds:Ids SQUARECLOSE WITH CURLYOPEN SEED:d COLON INTEGER:s CURLYCLOSE {:AST run = new AST("RUN");
                                                                                                             run.addChild(Ids);
+                                                                                                            run.addChild(new AST(d.toString()));
                                                                                                             run.addChild(new AST(s.toString()));
                                                                                                             RESULT = run; :} ; 
 
@@ -152,14 +158,60 @@ conditions ::= conditions:cs condition:c {:AST cond = new AST("CONDITIONS");
                                             cond.addChild(c);
                                             RESULT = cond; :} ;
 
-condition ::= IF booleanConditions:bc THEN decision:d COMMA{:AST con = new AST("CONDITION");
+condition ::= IF:i booleanExpression:bc THEN:t actions:d COMMA{:AST con = new AST("CONDITION");
+                                                        con.addChild(new AST(i.toString()));
                                                         con.addChild(bc);
+                                                        con.addChild(new AST(t.toString()));
                                                         con.addChild(d);
                                                         RESULT = con; :}
-                | ELSE decision:d {:AST con = new AST("CONDITION");
+                | ELSE:e actions:d {:AST con = new AST("CONDITION");
+                                    con.addChild(new AST(e.toString()));
                                     con.addChild(d);
                                     RESULT = con; :} ;
 
+
+            
+booleanExpression ::= booleanExpression:bs logical:l booleanExpression:b {:AST Bcond = new AST("BOOLEAN EXPRESSION");
+                                                                            Bcond.addChild(bs);
+                                                                            Bcond.addChild(l);
+                                                                            Bcond.addChild(b);
+                                                                            RESULT = Bcond; :}
+                    | booleanCondition:b {:AST Bcond = new AST("BOOLEAN EXPRESSION");
+                                            Bcond.addChild(b);
+                                            RESULT = Bcond; :} ; 
+
+booleanCondition ::= side:s1 comparison:s2 side:s3 {: AST bool = new AST("BOOLEAN CONDITION");
+                                                bool.addChild(s1);
+                                                bool.addChild(s2);
+                                                bool.addChild(s3);
+                                                RESULT = bool; :} ;
+
+side ::= funcs:f {: AST s = new AST("SIDE OPERATOR");
+                    s.addChild(f);
+                    RESULT = s; :} 
+        | state:f {: AST s = new AST("SIDE OPERATOR");
+                    s.addChild(f);
+                    RESULT = s; :} 
+        | decision:f {: AST s = new AST("SIDE OPERATOR");
+                            s.addChild(f);
+                            RESULT = s; :}
+        | SQUAREOPEN decisionList:f SQUARECLOSE {: AST s = new AST("SIDE OPERATOR");
+                            s.addChild(f);
+                            RESULT = s; :}
+        | INTEGER:f {: AST s = new AST("SIDE OPERATOR");
+                            s.addChild(new AST(f.toString()));
+                            RESULT = s; :}
+        | FLOAT:f {: AST s = new AST("SIDE OPERATOR");
+                            s.addChild(new AST(f.toString()));
+                            RESULT = s; :};
+
+
+actions ::= decision:c {:AST acts = new AST("ACTION");
+                            acts.addChild(c);
+                            RESULT = acts; :}
+            | funcs:c {:AST acts = new AST("ACTION");
+                            acts.addChild(c);
+                            RESULT = acts; :}; 
 
 decision ::= COOPERATE:c {:AST act = new AST("DECISION");
                             act.addChild(new AST(c.toString()));
@@ -167,32 +219,6 @@ decision ::= COOPERATE:c {:AST act = new AST("DECISION");
             | DEFECT:d {:AST act = new AST("DECISION");
                             act.addChild(new AST(d.toString()));
                             RESULT = act; :} ;
-            
-booleanConditions ::= booleanConditions:bs booleanCondition:b {:AST Bcond = new AST("BOOLEAN CONDITIONS");
-                                            Bcond.addChild(bs);
-                                            Bcond.addChild(b);
-                                            RESULT = Bcond; :}
-                    | booleanCondition:b {:AST Bcond = new AST("BOOLEAN CONDITIONS");
-                                            Bcond.addChild(b);
-                                            RESULT = Bcond; :} ; 
-
-booleanCondition ::= booleanCondition:b1 logical:l funcs:b2 {: AST bool = new AST("BOOLEAN CONDITION");
-                                                                        bool.addChild(b1);
-                                                                        bool.addChild(l);
-                                                                        bool.addChild(b2);
-                                                                        RESULT = bool; :} 
-                    | booleanCondition:b1 logical:l state:b2 {: AST bool = new AST("BOOLEAN CONDITION");
-                                                                        bool.addChild(b1);
-                                                                        bool.addChild(l);
-                                                                        bool.addChild(b2);
-                                                                        RESULT = bool; :} 
-                    | funcs:f {: AST bool = new AST("BOOLEAN CONDITION");
-                                bool.addChild(f);
-                                RESULT = bool; :}
-                    | state:s {: AST bool = new AST("BOOLEAN CONDITION");
-                                bool.addChild(s);
-                                RESULT = bool; :};
-
 
 logical ::= AND:a {: AST log = new AST("LOGICAL");
                     log.addChild(new AST(a.toString()));
@@ -201,63 +227,67 @@ logical ::= AND:a {: AST log = new AST("LOGICAL");
                     log.addChild(new AST(o.toString()));
                     RESULT = log; :};
 
-state ::=  stateInt:s1 comparison:c stateInt:s2 {: AST st = new AST("STATE");
-                                                    st.addChild(s1);
-                                                    st.addChild(c);
-                                                    st.addChild(s2);
-                                                    RESULT = st; :} ;
 
-stateInt ::= ROUND_NUMBER:r {: AST stArg = new AST("STATE ARG");
+state ::= ROUND_NUMBER:r {: AST stArg = new AST("STATE");
                                 stArg.addChild(new AST(r.toString()));
                                 RESULT = stArg; :} 
-            | TOTAL_ROUNDS:r {: AST stArg = new AST("STATE ARG");
+            | TOTAL_ROUNDS:r {: AST stArg = new AST("STATE");
                                 stArg.addChild(new AST(r.toString()));
                                 RESULT = stArg; :}
-            | RANDOM:r {: AST stArg = new AST("STATE ARG");
-                                stArg.addChild(new AST(r.toString()));
-                                RESULT = stArg; :}
-            | INTEGER:r {: AST stArg = new AST("STATE ARG");
-                                stArg.addChild(new AST(r.toString()));
-                                RESULT = stArg; :} 
-            | FLOAT:r {: AST stArg = new AST("STATE ARG");
+            | RANDOM:r {: AST stArg = new AST("STATE");
                                 stArg.addChild(new AST(r.toString()));
                                 RESULT = stArg; :} ;
 
-funcs ::= funcs:fs ROUNDOPEN func:f ROUNDCLOSE {: AST funs = new AST("FUNCTIONS");
-                                                funs.addChild(fs);
-                                                funs.addChild(f);
-                                                RESULT = funs; :}
+funcs ::= funcs:fs func:f {: AST funs = new AST("FUNCTIONS");
+                                funs.addChild(fs);
+                                funs.addChild(f);
+                                RESULT = funs; :}
             | func:f {: AST funs = new AST("FUNCTIONS");
                         funs.addChild(f);
                         RESULT = funs; :} ; 
 
-func ::= GET_MOVE:n ROUNDOPEN history:a1 COMMA stateInt:a2 ROUNDCLOSE comparison:c decision:d {: AST fun = new AST("FUNCTION");
-                                                                                                fun.addChild(new AST(n.toString()));
-                                                                                                fun.addChild(a1);
-                                                                                                fun.addChild(a2);
-                                                                                                fun.addChild(c);
-                                                                                                fun.addChild(d);
-                                                                                                RESULT = fun; :}
-        | LAST_MOVE:n ROUNDOPEN history:a1 ROUNDCLOSE comparison:c decision:d {: AST fun = new AST("FUNCTION");
+func ::= GET_MOVE:n ROUNDOPEN arg1:a1 COMMA arg2:a2 ROUNDCLOSE {: AST fun = new AST("FUNCTION");
+                                                                fun.addChild(new AST(n.toString()));
+                                                                fun.addChild(a1);
+                                                                fun.addChild(a2);
+                                                                RESULT = fun; :}
+        | LAST_MOVE:n ROUNDOPEN arg1:a1 ROUNDCLOSE {: AST fun = new AST("FUNCTION");
+                                                    fun.addChild(new AST(n.toString()));
+                                                    fun.addChild(a1);
+                                                    RESULT = fun; :} 
+        | GET_MOVES_COUNT:n ROUNDOPEN arg1:a1 COMMA arg2:a2 ROUNDCLOSE {: AST fun = new AST("FUNCTION");
+                                                                        fun.addChild(new AST(n.toString()));
+                                                                        fun.addChild(a1);
+                                                                        fun.addChild(a2);
+                                                                        RESULT = fun; :}
+        | GET_LAST_N_MOVES:n ROUNDOPEN arg1:a1 COMMA arg2:a2 ROUNDCLOSE  {: AST fun = new AST("FUNCTION");
                                                                                 fun.addChild(new AST(n.toString()));
                                                                                 fun.addChild(a1);
-                                                                                fun.addChild(c);
-                                                                                fun.addChild(d);
-                                                                                RESULT = fun; :} 
-        | GET_MOVES_COUNT:n ROUNDOPEN history:a1 COMMA decision:a2 ROUNDCLOSE comparison:c stateInt:d {: AST fun = new AST("FUNCTION");
-                                                                                                        fun.addChild(new AST(n.toString()));
-                                                                                                        fun.addChild(a1);
-                                                                                                        fun.addChild(a2);
-                                                                                                        fun.addChild(c);
-                                                                                                        fun.addChild(d);
-                                                                                                        RESULT = fun; :}
-        | GET_LAST_N_MOVES:n ROUNDOPEN history:a1 COMMA stateInt:a2 ROUNDCLOSE comparison:c SQUAREOPEN decisionList:d SQUARECLOSE {: AST fun = new AST("FUNCTION");
-                                                                                                                                    fun.addChild(new AST(n.toString()));
-                                                                                                                                    fun.addChild(a1);
-                                                                                                                                    fun.addChild(a2);
-                                                                                                                                    fun.addChild(c);
-                                                                                                                                    fun.addChild(d);
-                                                                                                                                    RESULT = fun; :}; 
+                                                                                fun.addChild(a2);                                                                                
+                                                                                RESULT = fun; :}; 
+
+arg1 ::= history:h {: AST arg1 = new AST("FUNCTION ARG1");
+                        arg1.addChild(h);
+                        RESULT = arg1; :} 
+        | func:h {: AST arg1 = new AST("FUNCTION ARG1");
+                arg1.addChild(h);
+                RESULT = arg1; :}
+        | state:h {: AST arg1 = new AST("FUNCTION ARG1");
+                arg1.addChild(h);
+                RESULT = arg1; :} ;
+
+arg2 ::= INTEGER:h {: AST arg2 = new AST("FUNCTION ARG2");
+                        arg2.addChild(new AST(h.toString()));
+                        RESULT = arg2; :}  
+        | decision:h {: AST arg2 = new AST("FUNCTION ARG2");
+                        arg2.addChild(h);
+                        RESULT = arg2; :}  
+        | func:h {: AST arg2 = new AST("FUNCTION ARG2");
+                        arg2.addChild(h);
+                        RESULT = arg2; :} 
+        | state:h {: AST arg2 = new AST("FUNCTION ARG2");
+                arg2.addChild(h);
+                RESULT = arg2; :};
 
 comparison ::= EQUAL:c {: AST comp = new AST("COMPARISON");
                             comp.addChild(new AST(c.toString()));
