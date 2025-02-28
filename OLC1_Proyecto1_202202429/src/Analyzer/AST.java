@@ -28,6 +28,17 @@ public class AST {
         for (AST child : root.childNodes) {
             run(child, TS);
         }
+        if (root.lex.equals("STRATEGY")) { //strategy ::= strat ID:0 { strategyArg:1 }
+            String strategy = root.childNodes.get(0).lex;
+            AST strategyArg = root.childNodes.get(1);
+        }
+        if (root.lex.equals("MATCH")){  //matches ::= MATCH ID { matchArgs } 
+            String matchID = root.childNodes.get(0).lex;
+            AST matchArgs = root.childNodes.get(1);
+            if (matchArgs.lex.equals("MATCH ARG") && matchArgs.childNodes.size()==4){
+                
+            }
+        }
     }
     
     

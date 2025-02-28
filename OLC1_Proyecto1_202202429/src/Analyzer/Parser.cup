@@ -16,8 +16,8 @@ terminal ROUNDOPEN, ROUNDCLOSE, GET_MOVE, LAST_MOVE, GET_MOVES_COUNT, GET_LAST_N
 terminal GREATER_OR_EQUAL, LOWER_OR_EQUAL, CURLYOPEN, CURLYCLOSE, SQUAREOPEN, SQUARECLOSE, COLON, COMMA, COOPERATE, DEFECT, INTEGER, FLOAT, ID;        
 
 non terminal AST S;
-non terminal AST instructions, instruction, strategy, matches, begining, matchArg, matchArgs, scoreArgs, scoreArg, beginingArgs, beginingArg; 
-non terminal AST strategyArg, strategyArgs, decision, conditions, condition, booleanCondition, booleanExpression, matchesIds, logical, state;
+non terminal AST strategy, matches, begining, matchArg, scoreArg, beginingArg; 
+non terminal AST strategyArg, decision, condition, conditions, booleanCondition, booleanExpression, matchesIds, logical, state;
 non terminal AST funcs, func, comparison, history, decisionList, side, actions, arg1, arg2; 
 
 precedence right NOT;  
@@ -27,95 +27,74 @@ precedence left OR;
 
 start with S;
 
-S ::= instructions:ins {: AST s = new AST("S");
-                            s.addChild(ins);
-                            RESULT = s; :};
 
-instructions ::= instructions:ins instruction:i {: AST instructions = new AST("INSTRUCTIONS");
-                                                   instructions.addChild(ins);
-                                                   instructions.addChild(i);
-                                                   RESULT = instructions;  :} 
-                | instruction:i {:AST instructions = new AST("INSTRUCTIONS");
-                                instructions.addChild(i);
-                                RESULT = instructions; :} ;
-
-instruction ::= strategy:strat {:AST ins = new AST("INSTRUCTION");
-                                    ins.addChild(strat);
-                                    RESULT = ins; :} 
-                | matches:m{:AST ins = new AST("INSTRUCTION");
-                            ins.addChild(m);
-                            RESULT = ins;:}
-                | begining:b{:AST ins = new AST("INSTRUCTION");
-                            ins.addChild(b);
-                            RESULT = ins;:} ;
-                            
-matches ::= MATCH ID:i CURLYOPEN matchArgs:arg CURLYCLOSE {:AST match = new AST("MATCH");
+S ::= strategy:str matches:m begining:b {: AST s = new AST("S");
+                                            s.addChild(str);
+                                            s.addChild(m);
+                                            s.addChild(b);
+                                            RESULT = s; :};
+ 
+                          
+matches ::= matches:m MATCH ID:i CURLYOPEN matchArg:arg CURLYCLOSE {:AST match = new AST("MATCH");
+                                                            match.addChild(m);
+                                                            match.addChild(new AST(i.toString()));
+                                                            match.addChild(arg);
+                                                            RESULT = match; :}
+        | MATCH ID:i CURLYOPEN matchArg:arg CURLYCLOSE{:AST match = new AST("MATCH");
                                                             match.addChild(new AST(i.toString()));
                                                             match.addChild(arg);
                                                             RESULT = match; :};
 
-matchArgs ::= matchArgs:mA matchArg:m {: AST ma = new AST("MATCH ARGS");
-                                        ma.addChild(mA);
-                                        ma.addChild(m);
-                                        RESULT = ma; :}
-            | matchArg:m {: AST ma = new AST("MATCH ARGS");
-                                        ma.addChild(m);
-                                        RESULT = ma; :};
 
-matchArg ::= PLAYERS STRATS COLON SQUAREOPEN ID:i1 COMMA ID:i2 SQUARECLOSE{:AST mArg = new AST("MATCH ARG");
-                                                                            mArg.addChild(new AST(i1.toString()));
-                                                                            mArg.addChild(new AST(i2.toString()));
-                                                                            RESULT = mArg; :} 
-            | ROUNDS:r COLON INTEGER:i {: AST mArg = new AST("MATCH ARG");
-                                        mArg.addChild(new AST(r.toString()));
-                                        mArg.addChild(new AST(i.toString()));
-                                        RESULT = mArg; :}
-            | SCORING:r COLON CURLYOPEN scoreArgs:sArg CURLYCLOSE {: AST mArg = new AST("MATCH ARG");
-                                                                mArg.addChild(new AST(r.toString()));
-                                                                mArg.addChild(sArg); 
-                                                                RESULT = mArg; :} ;
-scoreArgs ::= scoreArgs:sA scoreArg:s {: AST sc = new AST("SCORE ARG");
-                                        sc.addChild(sA);
-                                        sc.addChild(s);
-                                        RESULT = sc; :}
-            | scoreArg:s {: AST sc = new AST("SCORE ARG");
-                                        sc.addChild(s);
-                                        RESULT = sc; :}; 
+matchArg ::= PLAYERS:p STRATS:s COLON SQUAREOPEN ID:i1 COMMA ID:i2 SQUARECLOSE
+             ROUNDS:r COLON:c INTEGER:i
+             SCORING:sc COLON CURLYOPEN scoreArg:sArg CURLYCLOSE
+                                {:AST mArg = new AST("MATCH ARG");
+                                mArg.addChild(new AST(p.toString()));
+                                mArg.addChild(new AST(s.toString()));
+                                mArg.addChild(new AST(i1.toString()));
+                                mArg.addChild(new AST(i2.toString()));
+                                mArg.addChild(new AST(r.toString()));
+                                mArg.addChild(new AST(c.toString()));
+                                mArg.addChild(new AST(i.toString()));
+                                mArg.addChild(new AST(sc.toString()));
+                                mArg.addChild(sArg); 
+                                RESULT = mArg; :} ;
+            
 
-scoreArg ::= MUTUAL:m COOPERATION:c COLON INTEGER:i COMMA {: AST score = new AST("SCORE");
-                                                            score.addChild(new AST(m.toString()));
-                                                            score.addChild(new AST(c.toString()));
-                                                            score.addChild(new AST(i.toString()));
-                                                            RESULT = score; :}
-            | MUTUAL:m DEFECTION:c COLON INTEGER:i COMMA {: AST score = new AST("SCORE");
-                                                            score.addChild(new AST(m.toString()));
-                                                            score.addChild(new AST(c.toString()));
-                                                            score.addChild(new AST(i.toString()));
-                                                            RESULT = score; :}
-            | BETRAYAL:m REWARD:c COLON INTEGER:i COMMA {: AST score = new AST("SCORE");
-                                                            score.addChild(new AST(m.toString()));
-                                                            score.addChild(new AST(c.toString()));
-                                                            score.addChild(new AST(i.toString()));
-                                                            RESULT = score; :}
-            | BETRAYAL:m PUNISHMENT:c COLON INTEGER:i {: AST score = new AST("SCORE");
-                                                            score.addChild(new AST(m.toString()));
-                                                            score.addChild(new AST(c.toString()));
-                                                            score.addChild(new AST(i.toString()));
-                                                            RESULT = score; :} ;
+scoreArg ::= MUTUAL:m COOPERATION:c COLON INTEGER:i COMMA 
+             MUTUAL:m1 DEFECTION:d COLON INTEGER:i1 COMMA
+             BETRAYAL:b REWARD:r COLON INTEGER:i2 COMMA
+             BETRAYAL:b1 PUNISHMENT:p COLON INTEGER:i3
+                                                {: AST score = new AST("SCORE");
+                                                score.addChild(new AST(m.toString()));
+                                                score.addChild(new AST(c.toString()));
+                                                score.addChild(new AST(i.toString()));
+                                                score.addChild(new AST(m1.toString()));
+                                                score.addChild(new AST(d.toString()));
+                                                score.addChild(new AST(i1.toString()));
+                                                score.addChild(new AST(b.toString()));
+                                                score.addChild(new AST(r.toString()));
+                                                score.addChild(new AST(i2.toString()));
+                                                score.addChild(new AST(b1.toString()));
+                                                score.addChild(new AST(p.toString()));
+                                                score.addChild(new AST(i3.toString()));
+                                                RESULT = score; :} ;
 
-begining ::= MAIN CURLYOPEN beginingArgs:beginArgs CURLYCLOSE {:AST begin = new AST("MAIN");
-                                                                begin.addChild(beginArgs);
+begining ::= MAIN CURLYOPEN beginingArg:beginArg CURLYCLOSE {:AST begin = new AST("MAIN");
+                                                                begin.addChild(beginArg);
                                                                 RESULT = begin; :} ;
 
-beginingArgs ::= beginingArgs:b1 beginingArg:b2 {: AST args = new AST("MAIN_ARGS");
-                                                    args.addChild(b1);
-                                                    args.addChild(b2);
-                                                    RESULT = args; :}
-                | beginingArg:b1 {: AST args = new AST("MAIN_ARGS");
-                                                    args.addChild(b1);
-                                                    RESULT = args; :} ;
 
-beginingArg ::= RUN SQUAREOPEN matchesIds:Ids SQUARECLOSE WITH CURLYOPEN SEED:d COLON INTEGER:s CURLYCLOSE {:AST run = new AST("RUN");
+beginingArg ::= beginingArg:bArg RUN:r SQUAREOPEN matchesIds:Ids SQUARECLOSE WITH CURLYOPEN SEED:d COLON INTEGER:s CURLYCLOSE {:AST run = new AST("RUN");
+                                                                                                            run.addChild(bArg);
+                                                                                                            run.addChild(new AST(r.toString()));
+                                                                                                            run.addChild(Ids);
+                                                                                                            run.addChild(new AST(d.toString()));
+                                                                                                            run.addChild(new AST(s.toString()));
+                                                                                                            RESULT = run; :} 
+                | RUN:r SQUAREOPEN matchesIds:Ids SQUARECLOSE WITH CURLYOPEN SEED:d COLON INTEGER:s CURLYCLOSE{:AST run = new AST("RUN");
+                                                                                                            run.addChild(new AST(r.toString()));
                                                                                                             run.addChild(Ids);
                                                                                                             run.addChild(new AST(d.toString()));
                                                                                                             run.addChild(new AST(s.toString()));
@@ -129,26 +108,25 @@ matchesIds ::= matchesIds:i COMMA ID:i1 {: AST idList = new AST("MATCH_ID");
                         idList.addChild(new AST(i.toString()));
                         RESULT = idList; :};         
 
-strategy ::= STRAT ID:id CURLYOPEN strategyArgs:arg CURLYCLOSE{:AST strat = new AST("STRATEGY");
+strategy ::= strategy:str STRAT ID:id CURLYOPEN strategyArg:arg CURLYCLOSE{:AST strat = new AST("STRATEGY");
+                                                                strat.addChild(str);
                                                                 strat.addChild(new AST(id.toString()));
                                                                 strat.addChild(arg);
-                                                                RESULT = strat; :} ;
+                                                                RESULT = strat; :} 
+            | STRAT ID:id CURLYOPEN strategyArg:arg CURLYCLOSE{:AST strat = new AST("STRATEGY");
+                                                                strat.addChild(new AST(id.toString()));
+                                                                strat.addChild(arg);
+                                                                RESULT = strat; :};
 
-strategyArgs ::= strategyArgs:sA strategyArg:s {: AST stA = new AST("STRAT ARGS");
-                                        stA.addChild(sA);
-                                        stA.addChild(s);
-                                        RESULT = stA; :}
-                | strategyArg:s {: AST stA = new AST("SCORE ARG");
-                                        stA.addChild(s);
-                                        RESULT = stA; :} ; 
-strategyArg ::= INITIAL:i COLON decision:d {:AST dec = new AST("STRATEGY ARGUMENT");
+ 
+strategyArg ::= INITIAL:i COLON decision:d 
+                RULES:r COLON SQUAREOPEN conditions:c SQUARECLOSE
+                                            {:AST dec = new AST("STRATEGY ARGUMENT");
                                             dec.addChild(new AST(i.toString()));
                                             dec.addChild(d);
-                                            RESULT = dec; :}
-                | RULES:r COLON SQUAREOPEN conditions:c SQUARECLOSE{:AST dec = new AST("STRATEGY ARGUMENT");
-                                                                    dec.addChild(new AST(r.toString()));
-                                                                    dec.addChild(c);
-                                                                    RESULT = dec;:} ;
+                                            dec.addChild(new AST(r.toString()));
+                                            dec.addChild(c);
+                                            RESULT = dec; :} ;
 
 conditions ::= conditions:cs condition:c {:AST cond = new AST("CONDITIONS");
                                             cond.addChild(cs);
@@ -157,6 +135,7 @@ conditions ::= conditions:cs condition:c {:AST cond = new AST("CONDITIONS");
                 | condition:c {:AST cond = new AST("CONDITIONS");
                                             cond.addChild(c);
                                             RESULT = cond; :} ;
+
 
 condition ::= IF:i booleanExpression:bc THEN:t actions:d COMMA{:AST con = new AST("CONDITION");
                                                         con.addChild(new AST(i.toString()));
@@ -167,7 +146,7 @@ condition ::= IF:i booleanExpression:bc THEN:t actions:d COMMA{:AST con = new AS
                 | ELSE:e actions:d {:AST con = new AST("CONDITION");
                                     con.addChild(new AST(e.toString()));
                                     con.addChild(d);
-                                    RESULT = con; :} ;
+                                    RESULT = con; :};
 
 
             
