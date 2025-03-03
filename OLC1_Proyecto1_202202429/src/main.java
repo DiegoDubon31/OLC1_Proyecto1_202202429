@@ -1,10 +1,14 @@
 
+import AST.IAST;
 import Analyzer.AST;
 import Analyzer.DeterministicRandomGenerator;
-import Analyzer.Lexer;
+import Analyzer2.Lexer;
 import Analyzer.Parser;
 import Analyzer.RandomGenerator;
+import Analyzer2.Parser2;
+import Interpreter.Context;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,48 +33,75 @@ public class main {
        
 
         String input = """
-                       strategy Graaskamp {
+                      strategy Graaskamp {
+                          initial: D
+                          rules: [
+                              if round_number <= 2 then D,
+                              if round_number == 3 && get_moves_count(opponent_history, D) == 2 then C,
+                              if round_number > 3 && get_last_n_moves(opponent_history, 2) == [D, D] then D,
+                              else last_move(opponent_history)
+                          ]
+                      }
+                      
+                      strategy Random {
+                          initial: C
+                          rules: [
+                              if random < 0.5   then C,
+                              else D
+                          ]
+                      }
+                       strategy AlwaysDefect {
                            initial: D
                            rules: [
-                               if round_number <= 2 then D,
-                               if round_number == 3 && get_moves_count(opponent_history, D) == 2 then C,
-                               if round_number > 3 && get_last_n_moves(opponent_history, 2) == [D, D, C, C] then D,
-                               else last_move(opponent_history)
-                           ]
-                       }
-                       
-                       strategy Random {
-                           initial: C
-                           rules: [
-                               if random < 0.5 then C,
                                else D
                            ]
                        }
                        
-                       match GraaskampvsRandom {
-                           players strategies: [Graaskamp, Random]
-                           rounds: 100
-                           scoring: {
-                               mutual cooperation: 3, 
-                               mutual defection: 1, 
-                               betrayal reward: 5, 
-                               betrayal punishment: 0 
-                           }
+                       strategy AlwaysCooperate {
+                           initial: C
+                           rules: [
+                               else C
+                           ]
                        }
-                       
-                       
-                       main {
-                           run [GraaskampvsRandom] with {
-                               seed: 42
-                           }
                       
-                       }
+                      match GraaskampvsRandom {
+                          players strategies: [Graaskamp, Random]
+                          rounds: 100
+                          scoring: {
+                              mutual cooperation: 3, 
+                              mutual defection: 1, 
+                              betrayal reward: 5, 
+                              betrayal punishment: 0 
+                          }
+                      }
+                      match ADefectvsACoop {
+                          players strategies: [AlwaysDefect, AlwaysCooperate]
+                          rounds: 100
+                          scoring: {
+                              mutual cooperation: 3, 
+                              mutual defection: 1, 
+                              betrayal reward: 5, 
+                              betrayal punishment: 0 
+                          }
+                      }
+                       
+                      main {
+                          run [GraaskampvsRandom, ADefectvsACoop] with {
+                              seed: 42
+                          }
+                      }
+                       
+                      
                        """;
         Lexer scanner = new Lexer(new StringReader(input));
-        Parser sintax = new Parser(scanner);
+        Parser2 sintax = new Parser2(scanner);
        
-        AST root = (AST)sintax.parse().value;
-        root.printAST(root,"",true);
+        sintax.parse();
+        ArrayList<IAST> AST = sintax.AST;
+        Context context = new Context();
+        for (IAST iast : AST) {
+            iast.interpret(context);
+        }
     }
     
 }
