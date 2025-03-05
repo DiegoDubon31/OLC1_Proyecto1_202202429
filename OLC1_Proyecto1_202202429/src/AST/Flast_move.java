@@ -5,23 +5,33 @@
 package AST;
 
 import Interpreter.Context;
+import java.util.ArrayList;
 
 /**
  *
  * @author diego
  */
-public class Flast_move implements IAST<String>{
-    private String history;
+public class Flast_move implements IAST{
+    private IAST history;
 
-    public Flast_move(String history) {
+    public Flast_move(IAST history) {
         this.history = history;
     }
     
     
     @Override
     public String interpret(Context context) {
-        System.out.println("Función last_move de: "+history);
-        return "";
+        Object arg1 = history.interpret(context);
+        if (arg1 instanceof String sArg) {
+            if (sArg.equals("self_history")) {
+                ArrayList<String> hist = context.getSelfHistory();
+                return hist.get(hist.size()-1);
+            }else{
+                ArrayList<String> hist = context.getOpponentHistory();
+                return hist.get(hist.size()-1);
+            }
+        }
+        return null;
     }
     
     

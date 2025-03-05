@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author diego
  */
-public class MatchStmt implements IAST<Void>{
+public class MatchStmt implements IAST{
     private String id; 
     private String  s1;
     private String s2;

@@ -11,7 +11,7 @@ import Interpreter.Context;
  * @author diego
  * @param <T>
  */
-public class Literal<T> implements IAST<T> {
+public class Literal<T> implements IAST {
     private final T value;
 
     public Literal(T value) {

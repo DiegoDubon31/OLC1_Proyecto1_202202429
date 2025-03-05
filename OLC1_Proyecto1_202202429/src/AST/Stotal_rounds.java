@@ -10,7 +10,7 @@ import Interpreter.Context;
  *
  * @author diego
  */
-public class Stotal_rounds implements IAST<Integer>{
+public class Stotal_rounds implements IAST{
 
     public Stotal_rounds() {
     }

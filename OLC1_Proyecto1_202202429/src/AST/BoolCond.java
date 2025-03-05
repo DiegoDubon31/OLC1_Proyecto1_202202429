@@ -11,12 +11,12 @@ import java.util.ArrayList;
  *
  * @author diego
  */
-public class BoolCond implements IAST<Boolean>{
-    public IAST<?> side1;
+public class BoolCond implements IAST{
+    public IAST side1;
     public String operator;
-    public IAST<?> side2;
+    public IAST side2;
 
-    public BoolCond(IAST<?> side1, String operator, IAST<?> side2) {
+    public BoolCond(IAST side1, String operator, IAST side2) {
         this.side1 = side1;
         this.operator = operator;
         this.side2 = side2;

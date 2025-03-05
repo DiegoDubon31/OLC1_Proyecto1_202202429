@@ -6,8 +6,8 @@ package Interpreter;
 
 import AST.MatchStmt;
 import AST.Strategy;
-import Analyzer.DeterministicRandomGenerator;
-import Analyzer.RandomGenerator;
+import AST.DeterministicRandomGenerator;
+import AST.RandomGenerator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +27,8 @@ public class Context {
     private Map<String, Integer> score;  // Almacena el puntaje de cada partida
     private Map<String, ArrayList<String>> history;
     private String actStrat;
+    private String out="";
+    private int score1,score2 = 0;
     
     
     public Context(){
@@ -36,6 +38,31 @@ public class Context {
         this.history = new HashMap<>();
     }
 
+    public int getScore1() {
+        return score1;
+    }
+
+    public void setScore1(int score1) {
+        this.score1 += score1;
+    }
+
+    public int getScore2() {
+        return score2;
+    }
+
+    public void setScore2(int score2) {
+        this.score2 += score2;
+    }
+    
+    
+    public String getOut() {
+        return out;
+    }
+
+    public void setOut(String out) {
+        this.out += out;
+    }
+    
     public String getActStrat() {
         return actStrat;
     }
@@ -44,7 +71,9 @@ public class Context {
         this.actStrat = actStrat;
     }
     
-    
+    public void nextRound(){
+        this.roundNumber++;
+    }
     
     public int getRoundNumber() {
         return roundNumber;
@@ -62,12 +91,13 @@ public class Context {
         if (totalRounds>=0)this.totalRounds = totalRounds;
     }
 
-    public RandomGenerator getRandom() {
-        return random;
+    public double getRandom() {
+        return this.random.nextDouble();
     }
-
+   
     public void setRandom(int seed) {
-        this.random = new DeterministicRandomGenerator(seed);
+        this.random = DeterministicRandomGenerator.create(seed);
+         
     }
     
     public ArrayList<String> getSelfHistory() {
@@ -90,6 +120,9 @@ public class Context {
         score.put("mutual defection", 0);
         score.put("betrayal reward", 0);
         score.put("betrayal punishment", 0);
+        
+        this.score1 = 0;
+        this.score2 = 0;
     }
     
     public void runMatch(MatchStmt match){

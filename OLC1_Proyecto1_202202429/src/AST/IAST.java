@@ -9,9 +9,8 @@ import Interpreter.Context;
 /**
  *
  * @author diego
- * @param <T>
  */
 
-public interface IAST<T> {
-    T interpret(Context context);
+public interface IAST {
+    Object interpret(Context context);
 }

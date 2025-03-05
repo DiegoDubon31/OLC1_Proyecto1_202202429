@@ -5,16 +5,17 @@
 package AST;
 
 import Interpreter.Context;
+import java.util.ArrayList;
 
 /**
  *
  * @author diego
  */
-public class Fget_move implements IAST<String>{
-    private String history;
-    private int n;
+public class Fget_move implements IAST{
+    private IAST history;
+    private IAST n;
 
-    public Fget_move(String history, int n) {
+    public Fget_move(IAST history, IAST n) {
         this.history = history;
         this.n = n;
     }
@@ -23,8 +24,19 @@ public class Fget_move implements IAST<String>{
     
     @Override
     public String interpret(Context context) {
-        System.out.println("Funcion get_move en: "+history+" en posición: "+n);
-        return "";
+        Object arg1 = history.interpret(context);
+        Object arg2 = n.interpret(context);
+        if (arg1 instanceof String sArg && arg2 instanceof Integer iArg) {
+            if (arg1.equals("self_history")) {
+                ArrayList<String> hist = context.getSelfHistory();
+                return hist.get(iArg);
+            }else{
+                ArrayList<String> hist = context.getOpponentHistory();
+                return hist.get(iArg);
+            }
+        }
+        return null;
+        
     }
     
 }

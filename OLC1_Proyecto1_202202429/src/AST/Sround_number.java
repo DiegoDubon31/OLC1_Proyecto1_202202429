@@ -10,7 +10,7 @@ import Interpreter.Context;
  *
  * @author diego
  */
-public class Sround_number implements IAST<Integer>{
+public class Sround_number implements IAST{
 
     public Sround_number() {
     }

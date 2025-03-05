@@ -10,18 +10,20 @@ import Interpreter.Context;
  *
  * @author diego
  */
-public class Action implements IAST<String>{
+public class ElseStmt implements IAST{
+    private IAST action;
 
-    private String action;
-
-    public Action(String action) {
+    public ElseStmt(IAST action) {
         this.action = action;
     }
     
-    
-    
     @Override
     public String interpret(Context context) {
-        return action;
+        Object o = action.interpret(context);
+        if (o instanceof String s) {
+            return s;
+        }
+        return null;
     }
+    
 }

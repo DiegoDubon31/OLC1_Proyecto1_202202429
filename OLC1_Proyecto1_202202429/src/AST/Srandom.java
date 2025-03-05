@@ -4,20 +4,20 @@
  */
 package AST;
 
-import Analyzer.RandomGenerator;
 import Interpreter.Context;
 
 /**
  *
  * @author diego
  */
-public class Srandom implements IAST<RandomGenerator>{
+public class Srandom implements IAST{
 
     public Srandom() {
     }
     
     @Override
-    public RandomGenerator interpret(Context context) {
+    public Double interpret(Context context) {
+        
         return context.getRandom();
     }
     

@@ -11,17 +11,19 @@ import java.util.ArrayList;
  *
  * @author diego
  */
-public class Strategy implements IAST<Void>{
+public class Strategy implements IAST{
     private String ID;
     private String initial;
-    private ArrayList<IfStmt> rules; 
+    private ArrayList<IAST> rules; 
+    private IAST elseBranch;
     private ArrayList<String> history;
     private boolean inUse;
 
-    public Strategy(String ID, String initial, ArrayList<IfStmt> rules) {
+    public Strategy(String ID, String initial, ArrayList<IAST> rules) {
         this.ID = ID;
         this.initial = initial;
         this.rules = rules;
+        //this.elseBranch = elseBranch;
         this.history = new ArrayList<>();
         this.history.add(initial); 
         this.inUse = false;
@@ -60,11 +62,11 @@ public class Strategy implements IAST<Void>{
         this.initial = initial;
     }
 
-    public ArrayList<IfStmt> getRules() {
+    public ArrayList<IAST> getRules() {
         return rules;
     }
-
-    public void setRules(ArrayList<IfStmt> rules) {
+    
+    public void setRules(ArrayList<IAST> rules) {
         this.rules = rules;
     }
     

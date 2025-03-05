@@ -10,7 +10,10 @@ import AST.BoolCond;
 import AST.Srandom;
 import AST.Sround_number;
 import AST.Stotal_rounds;
-import AST.Function;
+import AST.Fget_move;
+import AST.Flast_move;
+import AST.Fget_last_n_moves;
+import AST.Fget_moves_count;
 import AST.Literal;
 
 
@@ -41,13 +44,12 @@ non terminal ArrayList<MatchStmt> matches;
 non terminal MatchStmt matchStmt;
 non terminal ArrayList<Strategy> strategy; 
 non terminal Strategy stratStmt;
-non terminal IfStmt ifStmt;
-non terminal ArrayList<IfStmt> conditions;
+non terminal ArrayList<IAST> conditions;
 non terminal BoolExpr booleanExpression;
 non terminal BoolCond booleanCondition;
 non terminal ArrayList<String> decisionList;
-non terminal Function func;
-non terminal IAST<?> actions, side, state, history, arg1, arg2;
+non terminal IAST func, ifStmt;
+non terminal IAST actions, side, state, arg1, arg2, history;
 non terminal String logical, comparison;
 
 precedence nonassoc EQUAL, INEQUAL, LOWER_THAN, GREATER_THAN, LOWER_OR_EQUAL, GREATER_OR_EQUAL; 
@@ -66,8 +68,8 @@ S ::= strategy:s matches:ma mainStmt:b {:for (Strategy st : s) {
                                         parser.AST.add(b); :};
  
                           
-matches ::= matches:m matchStmt:ms {:RESULT = m; RESULT.add(ms); parser.AST.add(ms);:}
-        | matchStmt:ms {:RESULT = new ArrayList<MatchStmt>(); RESULT.add(ms); parser.AST.add(ms);:} ;
+matches ::= matches:m matchStmt:ms {:RESULT = m; RESULT.add(ms);:}
+        | matchStmt:ms {:RESULT = new ArrayList<MatchStmt>(); RESULT.add(ms); :} ;
 
 matchStmt ::= MATCH ID:id CURLYOPEN 
                 PLAYERS STRATS COLON SQUAREOPEN ID:id1 COMMA ID:id2 SQUARECLOSE
@@ -105,11 +107,12 @@ stratStmt ::= STRAT ID:id CURLYOPEN
                 CURLYCLOSE {:RESULT = new Strategy(id.toString(), d.toString(), c);:};
                                             
 conditions ::= conditions:cs ifStmt:c {:RESULT = cs; RESULT.add(c);:} 
-                | ifStmt:c {:RESULT = new ArrayList<IfStmt>(); RESULT.add(c); :} ;
+                | ifStmt:c {:RESULT = new ArrayList<IAST>(); RESULT.add(c); :} 
+                ;
 
 
-ifStmt ::= IF booleanExpression:bc THEN actions:d COMMA{:RESULT = new IfStmt(bc, d, null); :}
-                | ELSE actions:d {://RESULT = new IfStmt(null, null, d); :};
+ifStmt ::= IF booleanExpression:bc THEN actions:d COMMA{:RESULT = new IfStmt(bc, d); :}
+        | ELSE actions:e{:RESULT = e;:};
 
 
             
@@ -128,8 +131,8 @@ side ::= func:f {:RESULT = f; :}
 
 
 actions ::= DECISION:c {:RESULT = new Literal<>(c.toString());:}
-            |GET_MOVE ROUNDOPEN arg1:a1 COMMA arg2:a2 ROUNDCLOSE {:RESULT = new Function("get_move", a1, a2);:}
-            |LAST_MOVE ROUNDOPEN arg1:a1 ROUNDCLOSE {: RESULT = new Function("last_move", a1); :}; 
+            |GET_MOVE ROUNDOPEN arg1:a1 COMMA arg2:a2 ROUNDCLOSE {:RESULT = new Fget_move(a1, a2);:}
+            |LAST_MOVE ROUNDOPEN arg1:a1 ROUNDCLOSE {: RESULT = new Flast_move(a1); :}; 
 
 
 
@@ -142,16 +145,16 @@ state ::= ROUND_NUMBER {: RESULT = new Sround_number(); :}
             | RANDOM {: RESULT = new Srandom(); :} ;
 
 
-func ::= GET_MOVE:n ROUNDOPEN arg1:a1 COMMA arg2:a2 ROUNDCLOSE {: RESULT = new Function("get_move", a1, a2); :}
-        | LAST_MOVE:n ROUNDOPEN arg1:a1 ROUNDCLOSE {: RESULT = new Function("last_move", a1); :} 
-        | GET_MOVES_COUNT:n ROUNDOPEN arg1:a1 COMMA arg2:a2 ROUNDCLOSE {:RESULT = new Function("get_moves_count", a1, a2); :}
-        | GET_LAST_N_MOVES:n ROUNDOPEN arg1:a1 COMMA arg2:a2 ROUNDCLOSE  {: RESULT = new Function("get_last_n_moves", a1, a2); :}; 
+func ::= GET_MOVE:n ROUNDOPEN arg1:a1 COMMA arg2:a2 ROUNDCLOSE {: RESULT = new Fget_move(a1, a2); :}
+        | LAST_MOVE:n ROUNDOPEN arg1:a1 ROUNDCLOSE {: RESULT = new Flast_move(a1); :} 
+        | GET_MOVES_COUNT:n ROUNDOPEN arg1:a1 COMMA arg2:a2 ROUNDCLOSE {:RESULT = new Fget_moves_count(a1, a2); :}
+        | GET_LAST_N_MOVES:n ROUNDOPEN arg1:a1 COMMA arg2:a2 ROUNDCLOSE  {: RESULT = new Fget_last_n_moves(a1, a2); :}; 
 
 arg1 ::= history:h {: RESULT = h; :} 
         | func:h {: RESULT = h; :}
         | state:h {: RESULT = h; :} ;
 
-arg2 ::= INTEGER:h {: RESULT = new Literal<>(h.toString()); :}  
+arg2 ::= INTEGER:h {: RESULT = new Literal<>(Integer.parseInt(h.toString())); :}  
         | DECISION:h {: RESULT = new Literal<>(h.toString()); :}  
         | func:h {: RESULT = h; :} 
         | state:h {: RESULT = h; :};

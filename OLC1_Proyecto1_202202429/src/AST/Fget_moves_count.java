@@ -5,24 +5,51 @@
 package AST;
 
 import Interpreter.Context;
+import java.util.ArrayList;
 
 /**
  *
  * @author diego
  */
-public class Fget_moves_count implements IAST<String>{
-    private String history;
-    private String action;
+public class Fget_moves_count implements IAST{
+    private IAST history;
+    private IAST action;
 
-    public Fget_moves_count(String history, String action) {
+    public Fget_moves_count(IAST history, IAST action) {
         this.history = history;
         this.action = action;
     }
 
     @Override
-    public String interpret(Context context) {
-        System.out.println("Func get_moves_count en: "+history+" contar: "+action);
-        return "";
+    public Integer interpret(Context context) {
+        Object arg1 = history.interpret(context);
+        Object arg2 = action.interpret(context);
+        if (arg1 instanceof String sArg1 && arg2 instanceof String sArg2) {
+            if (arg1.equals("self_history")) {
+                ArrayList<String> hist = context.getSelfHistory();
+                String decision;
+                int counter=0;
+                for (int i = 0; i < hist.size(); i++) {
+                    decision = hist.get(i);
+                    if (decision.equals(sArg2)) {
+                       counter++; 
+                    }
+                }
+                return counter;
+            }else{
+                ArrayList<String> hist = context.getOpponentHistory();
+                String decision;
+                int counter=0;
+                for (int i = 0; i < hist.size(); i++) {
+                    decision = hist.get(i);
+                    if (decision.equals(sArg2)) {
+                       counter++; 
+                    }
+                }
+                return counter;
+            }
+        }
+        return null;
     }
     
     

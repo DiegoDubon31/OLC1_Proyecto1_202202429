@@ -11,22 +11,23 @@ import java.util.ArrayList;
  *
  * @author diego
  */
-public class MainStmt implements IAST<Void>{
+public class MainStmt implements IAST{
     public ArrayList<RunStmt> runs;
 
     public MainStmt(ArrayList<RunStmt> runs) {
         this.runs = runs;
     }
-    
-    
+
     @Override
-    public Void interpret(Context context) {
+    public Object interpret(Context context) {
         System.out.println("Main Statement");
         for (RunStmt run : runs) {
            run.interpret(context);
         }
-        
         return null;
     }
+    
+    
+    
     
 }
