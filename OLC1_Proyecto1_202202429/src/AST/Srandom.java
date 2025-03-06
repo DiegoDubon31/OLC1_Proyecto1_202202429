@@ -17,8 +17,11 @@ public class Srandom implements IAST{
     
     @Override
     public Double interpret(Context context) {
+        Strategy strat = context.getStrat(context.getActStrat());
+        RandomGenerator random = context.getRandom();
+        strat.setRandom(random);
         
-        return context.getRandom();
+        return strat.getRandom().nextDouble();
     }
     
 }

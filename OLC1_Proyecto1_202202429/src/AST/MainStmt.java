@@ -20,7 +20,6 @@ public class MainStmt implements IAST{
 
     @Override
     public Object interpret(Context context) {
-        System.out.println("Main Statement");
         for (RunStmt run : runs) {
            run.interpret(context);
         }

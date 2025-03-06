@@ -91,8 +91,8 @@ public class Context {
         if (totalRounds>=0)this.totalRounds = totalRounds;
     }
 
-    public double getRandom() {
-        return this.random.nextDouble();
+    public RandomGenerator getRandom() {
+        return this.random;
     }
    
     public void setRandom(int seed) {
@@ -116,11 +116,6 @@ public class Context {
     public void init(){
         this.totalRounds = 0;
         this.roundNumber = 0;
-        score.put("mutual cooperation", 0);
-        score.put("mutual defection", 0);
-        score.put("betrayal reward", 0);
-        score.put("betrayal punishment", 0);
-        
         this.score1 = 0;
         this.score2 = 0;
     }

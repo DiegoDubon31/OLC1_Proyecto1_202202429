@@ -33,27 +33,25 @@ public class main {
        
 
         String input = """
-                       strategy Graaskamp {
+                       strategy Tester {
                            initial: D
                            rules: [
-                               if round_number <= 2 then D,
-                               if round_number == 3 && get_moves_count(opponent_history, D) == 2 then C,
-                               if round_number > 3 && get_last_n_moves(opponent_history, 2) == [D, D] then D,
-                               else last_move(opponent_history)
+                               if round_number == 2 then C,
+                               if round_number == 3 && get_moves_count(opponent_history, D) == 1 then D,
+                               else C
                            ]
                        }
                        
-                       strategy Random {
+                       strategy AlwaysCooperate {
                            initial: C
                            rules: [
-                               if random < 0.5 then C,
-                               else D
+                               else C
                            ]
                        }
                        
-                       match GraaskampvsRandom {
-                           players strategies: [Graaskamp, Random]
-                           rounds: 100
+                       match TestervsAlwaysCooperate {
+                           players strategies: [Tester, AlwaysCooperate]
+                           rounds: 75
                            scoring: {
                                mutual cooperation: 3, 
                                mutual defection: 1, 
@@ -63,10 +61,11 @@ public class main {
                        }
                        
                        main {
-                           run [GraaskampvsRandom] with {
-                               seed: 42
+                           run [TestervsAlwaysCooperate] with {
+                               seed: 7
                            }
                        }
+                           
                        """;
         Lexer scanner = new Lexer(new StringReader(input));
         Parser2 sintax = new Parser2(scanner);
@@ -78,7 +77,6 @@ public class main {
             iast.interpret(context);
             
         }
-        System.out.println(context.getOut());
         
         /*RandomGenerator gen1 = DeterministicRandomGenerator.create(42);
         RandomGenerator gen2 = DeterministicRandomGenerator.create(42);

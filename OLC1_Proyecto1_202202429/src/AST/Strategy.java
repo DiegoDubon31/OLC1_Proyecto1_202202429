@@ -18,6 +18,7 @@ public class Strategy implements IAST{
     private IAST elseBranch;
     private ArrayList<String> history;
     private boolean inUse;
+    private RandomGenerator random;
 
     public Strategy(String ID, String initial, ArrayList<IAST> rules) {
         this.ID = ID;
@@ -25,7 +26,7 @@ public class Strategy implements IAST{
         this.rules = rules;
         //this.elseBranch = elseBranch;
         this.history = new ArrayList<>();
-        this.history.add(initial); 
+        //this.history.add(initial); 
         this.inUse = false;
     }
     
@@ -35,7 +36,17 @@ public class Strategy implements IAST{
         context.addStrat(ID, this);
         return null;
     }
+    public void initHistory(){
+        history.clear();
+    }
+    public RandomGenerator getRandom() {
+        return random;
+    }
 
+    public void setRandom(RandomGenerator random) {
+        this.random = random;
+    }
+    
     public boolean isInUse() {
         return inUse;
     }

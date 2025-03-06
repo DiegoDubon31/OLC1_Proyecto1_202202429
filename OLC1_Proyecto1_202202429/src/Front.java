@@ -31,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+
 /**
  *
  * @author diego
@@ -401,29 +402,7 @@ public class Front extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         abrirReportes();
-        try {
-            // Crear el JEditorPane si aún no existe
-            if (tokenReport == null) {
-                tokenReport = new JEditorPane();
-                tokenReport.setEditable(false);
-                tokenReport.setContentType("text/html"); // ✅ Asegura que el contenido se interprete como HTML
-            }
-
-            // Cargar el archivo HTML
-            File file = new File("C:\\Users\\diego\\Documents\\USACDiegoDubon\\2025\\OLC1\\Lab\\Proyecto1\\OLC1_Proyecto1_202202429\\reports\\Tokens.html");
-            tokenReport.setPage(file.toURI().toURL()); 
-
-            // Asegurar que el panel se muestra correctamente
-            JScrollPane scrollPane = new JScrollPane(tokenReport);
-            this.getContentPane().add(scrollPane); // ✅ Usa `getContentPane().add()` para asegurarte de que se agregue correctamente
-
-            // Refrescar la interfaz
-            this.revalidate();
-            this.repaint();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        
     }//GEN-LAST:event_jMenuItem2ActionPerformed
     
     private void abrirReportes(){

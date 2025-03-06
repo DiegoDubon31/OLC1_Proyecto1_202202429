@@ -28,12 +28,7 @@ public class RunStmt implements IAST{
         String id1;
         String id2;
         int coop, defect, traitor, betrayed =0;
-        context.init();
         context.setRandom(seed);
-        double r = context.getRandom();
-        System.out.println(r);
-        double r1 = context.getRandom();
-        System.out.println(r1);
         for (String matchId : matchIds) {
             context.setOut("=== Match "+matchId+" ===\n");
             context.setOut("Configuration: \n");
@@ -42,7 +37,7 @@ public class RunStmt implements IAST{
             id2 = match.getS2();
             context.setOut("Strategies: "+id1+" vs "+id2+ "\n");
             context.setTotalRounds(match.getRounds());
-            context.setScore(match.getScoring());
+            //context.setScore(match.getScoring());
             context.setOut("Rounds: "+context.getTotalRounds()+"\n");
             context.setOut("Scoring: \n");
             coop = match.getScoring().get("mutual cooperation");
@@ -60,12 +55,13 @@ public class RunStmt implements IAST{
             ArrayList<IAST> ifs2;
             String result1="";
             String result2="";
-            //System.out.println(strat1.getHistory());
-            //System.out.println(strat2.getHistory());
+            
             context.setOut("The round-by-round progression:\n");
             for (int i = 1; i <= context.getTotalRounds(); i++) {
                 if (i==1) {
                     //System.out.println("Round: "+i+" Strat1: "+strat1.getHistory().get(i-1)+", Strat2: "+strat2.getHistory().get(i-1));
+                    strat1.addHistory(strat1.getInitial());
+                    strat2.addHistory(strat2.getInitial());
                     context.setOut("Round "+i+": "+id1+"="+strat1.getHistory().get(i-1)+", "+id2+"="+strat2.getHistory().get(i-1)+" ");
                     if (strat1.getHistory().get(i-1).equals("C") && strat2.getHistory().get(i-1).equals("C")) {
                         context.setScore1(coop);
@@ -85,8 +81,7 @@ public class RunStmt implements IAST{
                         context.setOut("("+traitor+"/"+betrayed+")\n");
                     }
                     context.nextRound();
-                    //System.out.println("Round: "+context.getRoundNumber());
-                    //System.out.println("Round: "+context.getRoundNumber());
+                   
                     continue;
                     
                 }
@@ -133,12 +128,14 @@ public class RunStmt implements IAST{
                     }
                 
                 context.nextRound();
-                //System.out.println("Round: "+context.getRoundNumber());
             }
-            int Dcounter=0,Ccounter=0;
+            strat1.setInUse(false);
+            strat2.setInUse(false);
+            double Dcounter=0;
+            double Ccounter=0;
             context.setOut("Match summary: \n");
             context.setOut(id1+": \n");
-            context.setOut("Final points: "+context.getScore1()+"\n");
+            context.setOut("\t-Final points: "+context.getScore1()+"\n");
             for (String s : strat1.getHistory()) {
                 if (s.equals("D")) {
                     Dcounter++;
@@ -146,23 +143,16 @@ public class RunStmt implements IAST{
                     Ccounter++;
                 }
             }
-            double percent;
-            if (Dcounter!=0) {
-                percent=(Ccounter/Dcounter)*100;
-            }else{
-                percent=Ccounter;
-            }
-            context.setOut("Cooperations: "+percent+"%\n");
-            if (Ccounter!=0) {
-                percent=(Dcounter/Ccounter)*100;
-            }else{
-                percent=Dcounter;
-            }
-            context.setOut("Defections: "+percent+"%\n");
+            
+            double percent=0;
+            percent = (Ccounter/context.getTotalRounds())*100;
+            context.setOut("\t-Cooperations: "+percent+"%\n");
+            percent = (Dcounter/context.getTotalRounds())*100;
+            context.setOut("\t-Defections: "+percent+"%\n");
             Dcounter=0;
             Ccounter=0;
             context.setOut(id2+": \n");
-            context.setOut("Final points: "+context.getScore2()+"\n");
+            context.setOut("\t-Final points: "+context.getScore2()+"\n");
             for (String s : strat2.getHistory()) {
                 if (s.equals("D")) {
                     Dcounter++;
@@ -170,22 +160,16 @@ public class RunStmt implements IAST{
                     Ccounter++;
                 }
             }
-            if (Dcounter!=0) {
-                percent=(Ccounter/Dcounter)*100;
-            }else{
-                percent=Ccounter;
-            }
-            context.setOut("Cooperations: "+percent+"%\n");
-            if (Ccounter!=0) {
-                percent=(Dcounter/Ccounter)*100;
-            }else{
-                percent=Dcounter;
-            }
-            context.setOut("Defections: "+percent+"%\n");
+            percent = (Ccounter/context.getTotalRounds())*100;
+            context.setOut("\t-Cooperations: "+percent+"%\n");
+            percent = (Dcounter/context.getTotalRounds())*100;
+            context.setOut("\t-Defections: "+percent+"%\n");
             
             System.out.println(context.getOut());
             System.out.println(strat1.getHistory());
             System.out.println(strat2.getHistory());
+            strat1.initHistory();
+            strat2.initHistory();
             context.init();
         }
         
