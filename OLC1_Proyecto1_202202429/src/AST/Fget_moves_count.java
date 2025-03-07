@@ -24,11 +24,13 @@ public class Fget_moves_count implements IAST{
     public Integer interpret(Context context) {
         Object arg1 = history.interpret(context);
         Object arg2 = action.interpret(context);
+        
         if (arg1 instanceof String sArg1 && arg2 instanceof String sArg2) {
             if (arg1.equals("self_history")) {
                 ArrayList<String> hist = context.getSelfHistory();
                 String decision;
                 int counter=0;
+                
                 for (int i = 0; i < hist.size(); i++) {
                     decision = hist.get(i);
                     if (decision.equals(sArg2)) {
@@ -48,6 +50,16 @@ public class Fget_moves_count implements IAST{
                 }
                 return counter;
             }
+        }else if (arg1 instanceof ArrayList<?> arr && arg2 instanceof String sArg2) {
+            int counter=0;
+            String decision;
+            for (int i = 0; i < arr.size(); i++) {
+                decision = (String) arr.get(i);
+                if (decision.equals(sArg2)) {
+                   counter++; 
+                }
+            }
+            return counter;
         }
         return null;
     }

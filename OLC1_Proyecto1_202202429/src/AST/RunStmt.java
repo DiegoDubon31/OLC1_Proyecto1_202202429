@@ -59,32 +59,36 @@ public class RunStmt implements IAST{
             context.setOut("The round-by-round progression:\n");
             for (int i = 1; i <= context.getTotalRounds(); i++) {
                 if (i==1) {
-                    //System.out.println("Round: "+i+" Strat1: "+strat1.getHistory().get(i-1)+", Strat2: "+strat2.getHistory().get(i-1));
+                    //System.out.println("Round: "+i+" Strat1: "+strat1.getHistory().get(0)+", Strat2: "+strat2.getHistory().get(0));
                     strat1.addHistory(strat1.getInitial());
                     strat2.addHistory(strat2.getInitial());
-                    context.setOut("Round "+i+": "+id1+"="+strat1.getHistory().get(i-1)+", "+id2+"="+strat2.getHistory().get(i-1)+" ");
-                    if (strat1.getHistory().get(i-1).equals("C") && strat2.getHistory().get(i-1).equals("C")) {
+                    
+                    if (strat1.getHistory().get(0).equals("C") && strat2.getHistory().get(0).equals("C")) {
                         context.setScore1(coop);
                         context.setScore2(coop);
+                        context.setOut("Round "+i+": "+id1+"=COOPERATE, "+id2+"=COOPERATE ");
                         context.setOut("("+coop+"/"+coop+")\n");
-                    }else if (strat1.getHistory().get(i-1).equals("D") && strat2.getHistory().get(i-1).equals("D")) {
+                    }else if (strat1.getHistory().get(0).equals("D") && strat2.getHistory().get(0).equals("D")) {
                         context.setScore1(defect);
                         context.setScore2(defect);
+                        context.setOut("Round "+i+": "+id1+"=DEFECT, "+id2+"=DEFECT ");
                         context.setOut("("+defect+"/"+defect+")\n");
-                    }else if (strat1.getHistory().get(i-1).equals("C") && strat2.getHistory().get(i-1).equals("D")) {
+                    }else if (strat1.getHistory().get(0).equals("C") && strat2.getHistory().get(0).equals("D")) {
                         context.setScore1(betrayed);
                         context.setScore2(traitor);
+                        context.setOut("Round "+i+": "+id1+"=COOPERATE, "+id2+"=DEFECT ");
                         context.setOut("("+betrayed+"/"+traitor+")\n");
-                    }else if (strat1.getHistory().get(i-1).equals("D") && strat2.getHistory().get(i-1).equals("C")) {
+                    }else if (strat1.getHistory().get(0).equals("D") && strat2.getHistory().get(0).equals("C")) {
                         context.setScore1(traitor);
                         context.setScore2(betrayed);
+                        context.setOut("Round "+i+": "+id1+"=DEFECT, "+id2+"=COOPERATE ");
                         context.setOut("("+traitor+"/"+betrayed+")\n");
                     }
                     context.nextRound();
-                   
                     continue;
                     
                 }
+                context.nextRound();
                 context.setActStrat(id1);
                 ifs1 = strat1.getRules();
                 for (IAST If1 : ifs1) {
@@ -108,26 +112,28 @@ public class RunStmt implements IAST{
                         
                 }
             
-                context.setOut("Round "+i+": "+id1+"="+result1+", "+id2+"="+result2+" ");
-                    if (strat1.getHistory().get(i-1).equals("C") && strat2.getHistory().get(i-1).equals("C")) {
+                    if (result1.equals("C") && result2.equals("C")) {
                         context.setScore1(coop);
                         context.setScore2(coop);
+                        context.setOut("Round "+i+": "+id1+"=COOPERATE, "+id2+"=COOPERATE ");
                         context.setOut("("+coop+"/"+coop+")\n");
-                    }else if (strat1.getHistory().get(i-1).equals("D") && strat2.getHistory().get(i-1).equals("D")) {
+                    }else if (result1.equals("D") && result2.equals("D")) {
                         context.setScore1(defect);
                         context.setScore2(defect);
+                        context.setOut("Round "+i+": "+id1+"=DEFECT, "+id2+"=DEFECT ");
                         context.setOut("("+defect+"/"+defect+")\n");
-                    }else if (strat1.getHistory().get(i-1).equals("C") && strat2.getHistory().get(i-1).equals("D")) {
+                    }else if (result1.equals("C") && result2.equals("D")) {
                         context.setScore1(betrayed);
                         context.setScore2(traitor);
+                        context.setOut("Round "+i+": "+id1+"=COOPERATE, "+id2+"=DEFECT ");
                         context.setOut("("+betrayed+"/"+traitor+")\n");
-                    }else if (strat1.getHistory().get(i-1).equals("D") && strat2.getHistory().get(i-1).equals("C")) {
+                    }else if (result1.equals("D") && result2.equals("C")) {
                         context.setScore1(traitor);
                         context.setScore2(betrayed);
+                        context.setOut("Round "+i+": "+id1+"=DEFECT, "+id2+"=COOPERATE ");
                         context.setOut("("+traitor+"/"+betrayed+")\n");
                     }
                 
-                context.nextRound();
             }
             strat1.setInUse(false);
             strat2.setInUse(false);

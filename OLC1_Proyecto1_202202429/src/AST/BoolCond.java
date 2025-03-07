@@ -27,7 +27,9 @@ public class BoolCond implements IAST{
     public Boolean interpret(Context context) {
         Object value1 = side1.interpret(context);
         Object value2 = side2.interpret(context);
-
+        if (value1 == null || value2 == null) {
+            return null;
+        }
         if (value1 instanceof Number && value2 instanceof Number) {
             double num1 = ((Number) value1).doubleValue();
             double num2 = ((Number) value2).doubleValue();

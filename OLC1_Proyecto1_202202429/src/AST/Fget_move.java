@@ -26,13 +26,25 @@ public class Fget_move implements IAST{
     public String interpret(Context context) {
         Object arg1 = history.interpret(context);
         Object arg2 = n.interpret(context);
+        
+        
         if (arg1 instanceof String sArg && arg2 instanceof Integer iArg) {
+            
             if (arg1.equals("self_history")) {
                 ArrayList<String> hist = context.getSelfHistory();
-                return hist.get(iArg);
+                if (iArg>hist.size()) {
+                    return null;
+                }else{
+                    return hist.get(iArg);
+                }
             }else{
                 ArrayList<String> hist = context.getOpponentHistory();
-                return hist.get(iArg);
+                if (iArg>hist.size()) {
+                    return null;
+                }else{
+                    return hist.get(iArg);
+                }
+                
             }
         }
         return null;

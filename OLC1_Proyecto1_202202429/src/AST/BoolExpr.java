@@ -26,18 +26,21 @@ public class BoolExpr implements IAST{
     public Boolean interpret(Context context) {
         if (operator == null && side2 == null) {
             Object o = side1.interpret(context);
+            
             if (o instanceof Boolean bool) {
                 return bool;
             }
             
         }else{
             switch (operator){
+                
                 case "&&" -> {
                     Object o1 = side1.interpret(context);
                     Object o2 = side2.interpret(context);
                     if (o1 instanceof Boolean bool1 && o2 instanceof Boolean bool2) {
                         return bool1 && bool2; 
                     }
+                    return null;
                     
                 }
                 case "||" -> {
@@ -46,6 +49,7 @@ public class BoolExpr implements IAST{
                     if (o1 instanceof Boolean bool1 && o2 instanceof Boolean bool2) {
                         return bool1 || bool2; 
                     }
+                    return null;
                 }
                 default -> System.out.println("No valid boolean operation");
             }

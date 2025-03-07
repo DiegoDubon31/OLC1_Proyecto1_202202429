@@ -33,12 +33,27 @@ public class main {
        
 
         String input = """
-                       strategy Tester {
+                       strategy Graaskamp {
                            initial: D
                            rules: [
-                               if round_number == 2 then C,
-                               if round_number == 3 && get_moves_count(opponent_history, D) == 1 then D,
-                               else C
+                               if round_number <= 2 then D,
+                               if round_number == 3 && get_moves_count(opponent_history, D) == 2 then C,
+                               if round_number > 3 && get_last_n_moves(opponent_history, 2) == [D, D] then D,
+                               else last_move(opponent_history)
+                           ]
+                       }
+                       
+                       strategy Random {
+                           initial: C
+                           rules: [
+                               if random < 0.5 then C,
+                               else D
+                           ]
+                       }
+                       strategy AlwaysDefect {
+                           initial: D
+                           rules: [
+                               else D
                            ]
                        }
                        
@@ -49,9 +64,9 @@ public class main {
                            ]
                        }
                        
-                       match TestervsAlwaysCooperate {
-                           players strategies: [Tester, AlwaysCooperate]
-                           rounds: 75
+                       match ADefectvsACoop {
+                           players strategies: [AlwaysDefect, AlwaysCooperate]
+                           rounds: 100
                            scoring: {
                                mutual cooperation: 3, 
                                mutual defection: 1, 
@@ -59,11 +74,54 @@ public class main {
                                betrayal punishment: 0 
                            }
                        }
+                       match GraaskampvsAlwaysCooperate {
+                           players strategies: [Graaskamp, AlwaysCooperate]
+                           rounds: 100
+                           scoring: {
+                               mutual cooperation: 3, 
+                               mutual defection: 1, 
+                               betrayal reward: 5, 
+                               betrayal punishment: 0 
+                           }
+                       }
+                       match RandomvsAlwaysDefect {
+                                                  players strategies: [Random, AlwaysDefect]
+                                                  rounds: 100
+                                                  scoring: {
+                                                      mutual cooperation: 3, 
+                                                      mutual defection: 1, 
+                                                      betrayal reward: 5, 
+                                                      betrayal punishment: 0 
+                                                  }
+                                              }
+                       match RandomvsAlwaysCooperate {
+                                                                         players strategies: [Random, AlwaysCooperate]
+                                                                         rounds: 100
+                                                                         scoring: {
+                                                                             mutual cooperation: 3, 
+                                                                             mutual defection: 1, 
+                                                                             betrayal reward: 5, 
+                                                                             betrayal punishment: 0 
+                                                                         }
+                                                                     }
+                       match GraaskampvsRandom {
+                            players strategies: [Graaskamp, Random]
+                            rounds: 100
+                            scoring: {
+                                mutual cooperation: 3, 
+                                mutual defection: 1, 
+                                betrayal reward: 5, 
+                                betrayal punishment: 0 
+                            }
+                        }
                        
                        main {
-                           run [TestervsAlwaysCooperate] with {
-                               seed: 7
+                           run [GraaskampvsRandom, ADefectvsACoop] with {
+                               seed: 42
                            }
+                            run [GraaskampvsRandom, GraaskampvsAlwaysCooperate, RandomvsAlwaysDefect, RandomvsAlwaysCooperate] with {
+                                 seed: 69
+                             }
                        }
                            
                        """;
