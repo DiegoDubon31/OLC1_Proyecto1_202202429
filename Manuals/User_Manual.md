@@ -12,4 +12,4 @@ They receive the following offers:
 
 The software presented simulates this dilemma, by defining strategies, matches, and running this matches.
 
-![Initial Screen]("https://drive.google.com/file/d/1kEWw9-42JKTe0E4Znw2F1Qh9CdGOFC8p/view?usp=drive_link")
+![Initial Screen](https://github.com/DiegoDubon31/-2S2024-OLC1_Proyecto1_202202429/blob/0b7a8792695f041ed62e2b946dd701464d4a1a13/Captura%20de%20pantalla%202025-03-08%20103949.png)
