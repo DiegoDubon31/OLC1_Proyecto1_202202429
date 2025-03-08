@@ -158,25 +158,25 @@ The following system states provide essential information about the current game
 ## **Running the program** ##
 Here is the screen you will be seeing while running this project: 
 
-![Initial Screen](https://github.com/DiegoDubon31/-2S2024-OLC1_Proyecto1_202202429/blob/0b7a8792695f041ed62e2b946dd701464d4a1a13/Captura%20de%20pantalla%202025-03-08%20103949.png)
+![Initial Screen](https://i.ibb.co/svHmR7TB/Captura-de-pantalla-2025-03-08-103949.png)
 
 You can open files, save files and start a new file. The files **MUST** be **".cmp"**. You find this option in the **File** item in the menu bar. **See the red square** 
 
-![File Screen](https://github.com/DiegoDubon31/-2S2024-OLC1_Proyecto1_202202429/blob/8c04815d94be10d5c85ca0045fccf0882cc78555/Captura%20de%20pantalla%202025-03-08%20114645.png)
+![File Screen](https://i.ibb.co/HTyKcXgD/Captura-de-pantalla-2025-03-08-114645.png)
 
 After you opened or created a new .cmp file you press the **Execute** item in the menu bar and it displays an **Analyze** option. When you press this option it will analyze the file and play the round by round match. In the console will be displayed the round by round, and the final scores. **See the red square**
 
-![Execute Screen](https://github.com/DiegoDubon31/-2S2024-OLC1_Proyecto1_202202429/blob/7ccb3c7a9c95896c3473a50217c1fe15356105cb/Captura%20de%20pantalla%202025-03-08%20125157.png)
+![Execute Screen](https://i.ibb.co/nMc75Xyx/Captura-de-pantalla-2025-03-08-125157.png)
 
 Finally you can see the error and token reports in the **Report** option in the menu item, you press the **view** option and will open automatically the html reports. **See the red square**
 
-![Reports Screen](https://github.com/DiegoDubon31/-2S2024-OLC1_Proyecto1_202202429/blob/df8f7efb07ea33ba64678abf8429dac2fabf3b3c/Captura%20de%20pantalla%202025-03-08%20125917.png)
+![Reports Screen](https://i.ibb.co/4zWT1S8/Captura-de-pantalla-2025-03-08-125917.png)
 
 **Tokens Report**
-![Tokens Screen](https://github.com/DiegoDubon31/-2S2024-OLC1_Proyecto1_202202429/blob/df8f7efb07ea33ba64678abf8429dac2fabf3b3c/Captura%20de%20pantalla%202025-03-08%20125854.png)
+![Tokens Screen](https://i.ibb.co/VWNTRSmb/Captura-de-pantalla-2025-03-08-125854.png)
 
 **Error Report**
-![Errors Screen](https://github.com/DiegoDubon31/-2S2024-OLC1_Proyecto1_202202429/blob/df8f7efb07ea33ba64678abf8429dac2fabf3b3c/Captura%20de%20pantalla%202025-03-08%20125906.png)
+![Errors Screen](https://i.ibb.co/KptvrP80/Captura-de-pantalla-2025-03-08-125906.png)
 
 ## **Final Remarks** ##
 This manual provided an overview of the **Prisoner's Dilemma Simulator**, explaining its **purpose**, **file format (.cmp)**, **functions and states**, and **how to use the program**. 
@@ -190,3 +190,4 @@ By following this guide, you should now be able to:
 If you encounter any **issues or have questions**, feel free to refer to the documentation or reach out for support.
 
 **Thank you for using the Prisoner’s Dilemma Simulator!** 
+
