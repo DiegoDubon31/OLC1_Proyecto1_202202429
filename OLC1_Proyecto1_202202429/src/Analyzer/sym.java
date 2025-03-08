@@ -8,62 +8,58 @@ package Analyzer;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int GET_MOVES_COUNT = 36;
-  public static final int GREATER_OR_EQUAL = 43;
-  public static final int SQUARECLOSE = 48;
-  public static final int CURLYOPEN = 45;
-  public static final int RANDOM = 42;
+  public static final int GET_MOVES_COUNT = 33;
+  public static final int GREATER_OR_EQUAL = 40;
+  public static final int SQUARECLOSE = 45;
+  public static final int CURLYOPEN = 42;
+  public static final int RANDOM = 39;
   public static final int WITH = 12;
+  public static final int DECISION = 48;
   public static final int MUTUAL = 17;
   public static final int REWARD = 21;
-  public static final int INTEGER = 53;
+  public static final int INTEGER = 51;
   public static final int STRAT = 2;
   public static final int SCORING = 10;
-  public static final int DEFECT = 52;
-  public static final int LOWER_OR_EQUAL = 44;
+  public static final int LOWER_OR_EQUAL = 41;
   public static final int DEFECTION = 19;
   public static final int MATCH = 3;
-  public static final int GREATER_THAN = 30;
+  public static final int GREATER_THAN = 27;
   public static final int RULES = 6;
-  public static final int NOT = 27;
-  public static final int AND = 25;
-  public static final int GET_LAST_N_MOVES = 37;
-  public static final int COOPERATE = 51;
-  public static final int OR = 26;
-  public static final int COMMA = 50;
+  public static final int AND = 23;
+  public static final int GET_LAST_N_MOVES = 34;
+  public static final int OR = 24;
+  public static final int COMMA = 47;
   public static final int MAIN = 4;
   public static final int IF = 7;
-  public static final int ID = 55;
+  public static final int ID = 50;
   public static final int INITIAL = 5;
   public static final int EOF = 0;
   public static final int ROUNDS = 16;
   public static final int PUNISHMENT = 22;
-  public static final int EQUAL = 28;
-  public static final int TRUE = 23;
-  public static final int ROUNDCLOSE = 33;
+  public static final int EQUAL = 25;
+  public static final int ROUNDCLOSE = 30;
   public static final int error = 1;
   public static final int PLAYERS = 14;
-  public static final int CURLYCLOSE = 46;
-  public static final int TOTAL_ROUNDS = 41;
+  public static final int CURLYCLOSE = 43;
+  public static final int TOTAL_ROUNDS = 38;
   public static final int BETRAYAL = 20;
-  public static final int SELF_HISTORY = 40;
-  public static final int ROUND_NUMBER = 38;
-  public static final int COLON = 49;
-  public static final int LAST_MOVE = 35;
+  public static final int SELF_HISTORY = 37;
+  public static final int ROUND_NUMBER = 35;
+  public static final int COLON = 46;
   public static final int STRATS = 15;
   public static final int COOPERATION = 18;
+  public static final int LAST_MOVE = 32;
   public static final int ELSE = 9;
-  public static final int GET_MOVE = 34;
-  public static final int FLOAT = 54;
+  public static final int GET_MOVE = 31;
+  public static final int FLOAT = 49;
   public static final int THEN = 8;
-  public static final int ROUNDOPEN = 32;
-  public static final int SQUAREOPEN = 47;
-  public static final int LOWER_THAN = 31;
+  public static final int ROUNDOPEN = 29;
+  public static final int SQUAREOPEN = 44;
+  public static final int LOWER_THAN = 28;
   public static final int SEED = 13;
-  public static final int OPPONENT_HISTORY = 39;
-  public static final int FALSE = 24;
+  public static final int OPPONENT_HISTORY = 36;
   public static final int RUN = 11;
-  public static final int INEQUAL = 29;
+  public static final int INEQUAL = 26;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -88,11 +84,8 @@ public class sym {
   "BETRAYAL",
   "REWARD",
   "PUNISHMENT",
-  "TRUE",
-  "FALSE",
   "AND",
   "OR",
-  "NOT",
   "EQUAL",
   "INEQUAL",
   "GREATER_THAN",
@@ -116,11 +109,10 @@ public class sym {
   "SQUARECLOSE",
   "COLON",
   "COMMA",
-  "COOPERATE",
-  "DEFECT",
-  "INTEGER",
+  "DECISION",
   "FLOAT",
-  "ID"
+  "ID",
+  "INTEGER"
   };
 }
 

@@ -4,10 +4,10 @@
  */
 package Interpreter;
 
-import AST.MatchStmt;
-import AST.Strategy;
-import AST.DeterministicRandomGenerator;
-import AST.RandomGenerator;
+import AST.Match.MatchStmt;
+import AST.Strategy.Strategy;
+import AST.Random.DeterministicRandomGenerator;
+import AST.Random.RandomGenerator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

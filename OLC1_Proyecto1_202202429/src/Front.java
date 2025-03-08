@@ -5,9 +5,10 @@
 
 
 import AST.IAST;
-import Analyzer2.Lexer;
-import Analyzer2.Lists;
-import Analyzer2.Parser2;
+import Analyzer.Lexer;
+import Analyzer.Lists;
+import Analyzer.Parser;
+import Analyzer.error;
 import Interpreter.Context;
 
 import java.awt.Desktop;
@@ -18,6 +19,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,7 +55,7 @@ public class Front extends javax.swing.JFrame {
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Define la acción al cerrar
         setLocationRelativeTo(null); // Centra la ventana en la pantalla
-        
+        setResizable(false);
         reiniciarCarpetas();
     }
     
@@ -76,10 +79,6 @@ public class Front extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         AnalizarArea = new javax.swing.JTextArea();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        tokenReport = new javax.swing.JEditorPane();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        errorReport = new javax.swing.JEditorPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         NuevoArchivoOp = new javax.swing.JMenuItem();
@@ -117,7 +116,7 @@ public class Front extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(204, 204, 204));
         jLabel1.setText("CONSOLE");
 
-        jButton3.setText("Limpiar consola");
+        jButton3.setText("Clean Console");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -128,46 +127,32 @@ public class Front extends javax.swing.JFrame {
         AnalizarArea.setRows(5);
         jScrollPane3.setViewportView(AnalizarArea);
 
-        jScrollPane4.setViewportView(tokenReport);
-
-        jScrollPane5.setViewportView(errorReport);
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 24, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3)))
-                        .addGap(30, 30, 30))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGap(12, 12, 12)
+                            .addComponent(jLabel1)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 592, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
-                    .addComponent(jScrollPane5))
-                .addGap(13, 13, 13)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
+                .addGap(17, 17, 17)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15))
@@ -176,9 +161,9 @@ public class Front extends javax.swing.JFrame {
         jMenuBar1.setBackground(new java.awt.Color(51, 51, 51));
         jMenuBar1.setForeground(new java.awt.Color(204, 204, 204));
 
-        jMenu2.setText("Archivo");
+        jMenu2.setText("File");
 
-        NuevoArchivoOp.setText("Nuevo");
+        NuevoArchivoOp.setText("New");
         NuevoArchivoOp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NuevoArchivoOpActionPerformed(evt);
@@ -186,7 +171,7 @@ public class Front extends javax.swing.JFrame {
         });
         jMenu2.add(NuevoArchivoOp);
 
-        GuardarArchivoOp.setText("Guardar");
+        GuardarArchivoOp.setText("Save");
         GuardarArchivoOp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GuardarArchivoOpActionPerformed(evt);
@@ -194,7 +179,7 @@ public class Front extends javax.swing.JFrame {
         });
         jMenu2.add(GuardarArchivoOp);
 
-        GuardarComoArchivoOp.setText("Guardar Como");
+        GuardarComoArchivoOp.setText("Open File...");
         GuardarComoArchivoOp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GuardarComoArchivoOpActionPerformed(evt);
@@ -204,14 +189,14 @@ public class Front extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Ejecutar");
+        jMenu3.setText("Execute");
         jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jMenu3MouseClicked(evt);
             }
         });
 
-        jMenuItem1.setText("Analizar");
+        jMenuItem1.setText("Analyze");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -221,14 +206,14 @@ public class Front extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu3);
 
-        jMenu4.setText("Reportes");
+        jMenu4.setText("Reports");
         jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jMenu4MouseClicked(evt);
             }
         });
 
-        jMenuItem2.setText("Ver ");
+        jMenuItem2.setText("View");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -245,9 +230,8 @@ public class Front extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -276,10 +260,10 @@ public class Front extends javax.swing.JFrame {
         // Si ya hay un archivo abierto, guarda directamente
         try (FileWriter fileWriter = new FileWriter(currentFile)) {
             fileWriter.write(textArea.getText());
-            JOptionPane.showMessageDialog(null, "Archivo guardado exitosamente.", "Guardado", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "File successfully saved.", "Saved", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error al guardar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error saving file.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     } else {
         // Si no hay archivo actual, llama a Guardar Como
@@ -333,14 +317,45 @@ public class Front extends javax.swing.JFrame {
     }
     private void GuardarComoArchivoOpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarComoArchivoOpActionPerformed
         // TODO add your handling code here:
-         guardarComo(AnalizarArea);   
+         abrirArchivoCMP();   
     }//GEN-LAST:event_GuardarComoArchivoOpActionPerformed
+    private void abrirArchivoCMP() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select File .CMP");
+
+        // Filtro para archivos .CMP
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos CMP (*.cmp)", "cmp");
+        fileChooser.setFileFilter(filtro);
+
+        int seleccion = fileChooser.showOpenDialog(this); // Mostrar el diálogo de apertura
+
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile(); // Obtener el archivo seleccionado
+            
+            // Verificar que la extensión sea correcta
+            if (!archivo.getName().toLowerCase().endsWith(".cmp")) {
+                JOptionPane.showMessageDialog(this, "Error: Select a file .CMP valid.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                // Leer el contenido del archivo y mostrarlo en AnalizarArea
+                String contenido = new String(Files.readAllBytes(archivo.toPath()), StandardCharsets.UTF_8);
+                AnalizarArea.setText(contenido); // Mostrar en el JTextArea
+                currentFile = archivo;
+
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error reading file.", "Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
+    }
     private void guardarComo(JTextArea textArea) {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Guardar Como");
+        fileChooser.setDialogTitle("Save as");
 
-        // Filtro para aceptar solo archivos .ca
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Files CMP", "cmp"));
+        // Filtro para aceptar solo archivos .cmp
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Files cmp", "cmp"));
 
         int userSelection = fileChooser.showSaveDialog(null);
         if (userSelection == JFileChooser.APPROVE_OPTION) {
@@ -353,10 +368,10 @@ public class Front extends javax.swing.JFrame {
 
             try (FileWriter fileWriter = new FileWriter(currentFile)) {
                 fileWriter.write(textArea.getText());
-                JOptionPane.showMessageDialog(null, "Archivo guardado exitosamente.", "Guardado", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "File successfully saved.", "Saved", JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Error al guardar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error saving file.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -382,7 +397,7 @@ public class Front extends javax.swing.JFrame {
         String texto = AnalizarArea.getText();
         
         Lexer scanner = new Lexer(new StringReader(texto)); 
-        Parser2 sintax = new Parser2(scanner);
+        Parser sintax = new Parser(scanner);
         
         try {
             sintax.parse();
@@ -391,7 +406,15 @@ public class Front extends javax.swing.JFrame {
             for (IAST iast : AST) {
                 iast.interpret(context);
             }
-            ConsolaTextArea.setText(context.getOut());
+            String current="";
+            if (!Lists.getErrorsList().isEmpty()) {
+                for (error e : Lists.getErrorsList()) {
+                    String errLex = "Error: "+"Type: "+e.getType()+": "+e.getLexeme()+" in line: "+e.getRow()+" and column: "+e.getColumn()+"\n";
+                    ConsolaTextArea.setText(current+=errLex);
+                }
+            }
+            current += context.getOut();
+            ConsolaTextArea.setText(current);
             Lists.generarTablaHTMLErrores();
             Lists.generarTablaHTMLTokens();
         } catch (Exception ex) {
@@ -407,27 +430,33 @@ public class Front extends javax.swing.JFrame {
     
     private void abrirReportes(){
         try {
-            // Ruta de la carpeta de reportes
-            File carpetaReportes = new File("./reports");
-
             // Verificar si Desktop es soportado por el sistema
             if (!Desktop.isDesktopSupported()) {
                 JOptionPane.showMessageDialog(this, "El escritorio no es soportado en este sistema.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Verificar si la carpeta de reportes existe
-            if (!carpetaReportes.exists()) {
-                JOptionPane.showMessageDialog(this, "La carpeta de reportes no existe.", "Error", JOptionPane.ERROR_MESSAGE);
+            Desktop desktop = Desktop.getDesktop();
+
+            // Rutas de los archivos de reportes
+            File tokensFile = new File("reports/Tokens.html");
+            File errorsFile = new File("reports/Errors.html");
+
+            // Verificar si los archivos existen antes de abrirlos
+            if (!tokensFile.exists() || !errorsFile.exists()) {
+                JOptionPane.showMessageDialog(this, "Uno o ambos archivos de reportes no existen.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Abrir la carpeta de reportes
-            Desktop.getDesktop().open(carpetaReportes);
+            // Abrir los archivos en el navegador predeterminado
+            desktop.browse(tokensFile.toURI());
+            desktop.browse(errorsFile.toURI());
+
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "No se pudo abrir la carpeta de reportes.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "No se pudo abrir los archivos de reportes.", "Error", JOptionPane.ERROR_MESSAGE);
             ex.printStackTrace();
         }
+    
     }
     
     
@@ -541,7 +570,7 @@ public class Front extends javax.swing.JFrame {
            
             String texto = AnalizarArea.getText();
             Lexer scanner = new Lexer(new StringReader(texto)); 
-            Parser2 sintax = new Parser2(scanner);
+            Parser sintax = new Parser(scanner);
             sintax.parse();
             try {
               ArrayList<IAST> AST = sintax.AST;
@@ -592,7 +621,6 @@ public class Front extends javax.swing.JFrame {
     private javax.swing.JMenuItem GuardarArchivoOp;
     private javax.swing.JMenuItem GuardarComoArchivoOp;
     private javax.swing.JMenuItem NuevoArchivoOp;
-    private javax.swing.JEditorPane errorReport;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu2;
@@ -605,9 +633,6 @@ public class Front extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTable jTable1;
-    private javax.swing.JEditorPane tokenReport;
     // End of variables declaration//GEN-END:variables
 }

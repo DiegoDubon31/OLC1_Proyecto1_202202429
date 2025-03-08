@@ -2,22 +2,24 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package AST;
+package AST.States;
 
+import AST.IAST;
 import Interpreter.Context;
 
 /**
  *
  * @author diego
  */
-public class Stotal_rounds implements IAST{
+public class Sround_number implements IAST{
 
-    public Stotal_rounds() {
+    public Sround_number() {
     }
+    
     
     @Override
     public Integer interpret(Context context) {
-        return context.getTotalRounds();
+        return context.getRoundNumber();
     }
     
 }

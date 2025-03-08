@@ -2,23 +2,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package AST;
+package AST.Literal;
 
+import AST.IAST;
 import Interpreter.Context;
 
 /**
  *
  * @author diego
+ * @param <T>
  */
-public class Sround_number implements IAST{
+public class Literal<T> implements IAST {
+    private final T value;
 
-    public Sround_number() {
+    public Literal(T value) {
+        this.value = value;
     }
-    
-    
     @Override
-    public Integer interpret(Context context) {
-        return context.getRoundNumber();
+    public T interpret(Context context) {
+        return value;
     }
     
 }

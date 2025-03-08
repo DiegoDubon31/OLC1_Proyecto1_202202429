@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package AST;
+package AST.Functions;
 
+import AST.IAST;
 import Interpreter.Context;
 import java.util.ArrayList;
 
@@ -54,6 +55,19 @@ public class Fget_last_n_moves implements IAST{
                     }
                     return aux;
                 }
+            }
+        }else if (arg1 instanceof ArrayList<?> arr && arg2 instanceof Integer iArg2) {
+            int counter=0;
+            String decision;
+            ArrayList<String> aux = new ArrayList<>();
+            if (iArg2>arr.size()) {
+                return null;
+            }else{
+                for (int i = arr.size()-1; i >= arr.size()-iArg2 ; i--) {
+                    decision = (String) arr.get(i);
+                    aux.add(decision);
+                }
+                return aux;
             }
         }
         return null;

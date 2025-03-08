@@ -1,4 +1,4 @@
-package Analyzer2;
+package Analyzer;
 import java_cup.runtime.Symbol;
 
 %%
@@ -76,8 +76,8 @@ RANDOM = "random"
 
 //-------> Regex and Literals
 DECISION = C|D
-SLcomment = #[^\n]*
-MLcomment = "<!"~"!>"
+SLcomment = "//"[^\n]*
+MLcomment = "/*"~"*/"
 SPACES = [ \t\r\n\f]+
 INTEGER = [0-9]+
 FLOAT = {INTEGER}(\.{INTEGER})
@@ -290,7 +290,7 @@ ID = [0-9A-Za-z_]+
     Lists.setTokensList(t);   
     return new Symbol(sym.ID, yyline + 1, yycolumn + 1, yytext()); }
 <YYINITIAL> . { 
-                error e = new error("El caracter "+yytext()+" no pertenece al lenguaje", "Lexico", String.valueOf(yyline+1), String.valueOf(yycolumn+1));
+                error e = new error("The character "+yytext()+" doesn't belong to the language", String.valueOf(yyline+1), String.valueOf(yycolumn+1), "Lexical");
                 Lists.setErrorsList(e);
                 String errLex = "Error léxico : '"+yytext()+"' en la línea: "+(yyline + 1)+" y columna: "+(yycolumn + 1);
                 System.out.println(errLex); }
