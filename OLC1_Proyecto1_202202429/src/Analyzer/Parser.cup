@@ -1,5 +1,5 @@
 package Analyzer;
-import AST.IAST;
+import AST.Interpreter.IAST;
 import AST.Main.MainStmt;
 import AST.Main.RunStmt;
 import AST.Match.MatchStmt;

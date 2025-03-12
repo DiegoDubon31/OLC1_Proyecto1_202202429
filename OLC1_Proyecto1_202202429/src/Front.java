@@ -4,12 +4,12 @@
  */
 
 
-import AST.IAST;
+import AST.Interpreter.IAST;
 import Analyzer.Lexer;
 import Analyzer.Lists;
 import Analyzer.Parser;
 import Analyzer.error;
-import Interpreter.Context;
+import AST.Interpreter.Context;
 
 import java.awt.Desktop;
 import java.io.BufferedReader;
@@ -284,7 +284,7 @@ public class Front extends javax.swing.JFrame {
     public static void reiniciarCarpetas() {
         // Define las rutas de las carpetas
         String reportesPath = "./reports";
-
+        Lists.initLists();
         // Reinicia las carpetas
         eliminarCarpeta(new File(reportesPath));
 
@@ -389,6 +389,7 @@ public class Front extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu4MouseClicked
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        reiniciarCarpetas();
         String texto = AnalizarArea.getText();
         
         Lexer scanner = new Lexer(new StringReader(texto)); 

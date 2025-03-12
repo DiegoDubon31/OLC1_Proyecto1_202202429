@@ -5,7 +5,7 @@
 
 package Analyzer;
 
-import AST.IAST;
+import AST.Interpreter.IAST;
 import AST.Main.MainStmt;
 import AST.Main.RunStmt;
 import AST.Match.MatchStmt;
@@ -13,7 +13,7 @@ import AST.Strategy.Strategy;
 import AST.Strategy.IfStmt;
 import AST.Strategy.BoolExpr;
 import AST.Strategy.BoolCond;
-import AST.Random.Srandom;
+import AST.States.Srandom;
 import AST.States.Sround_number;
 import AST.States.Stotal_rounds;
 import AST.Functions.Fget_move;

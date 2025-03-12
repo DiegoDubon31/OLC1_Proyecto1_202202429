@@ -4,8 +4,8 @@
  */
 package AST.Main;
 
-import AST.IAST;
-import Interpreter.Context;
+import AST.Interpreter.IAST;
+import AST.Interpreter.Context;
 import java.util.ArrayList;
 
 /**

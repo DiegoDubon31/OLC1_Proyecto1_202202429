@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Interpreter;
+package AST.Interpreter;
 
 import AST.Match.MatchStmt;
 import AST.Strategy.Strategy;
@@ -25,7 +25,6 @@ public class Context {
     private Map<String, Strategy> strats;  //  Almacena estrategias por ID
     private Map<String, MatchStmt> matches;
     private Map<String, Integer> score;  // Almacena el puntaje de cada partida
-    private Map<String, ArrayList<String>> history;
     private String actStrat;
     private String out="";
     private int score1,score2 = 0;
@@ -35,7 +34,6 @@ public class Context {
         this.matches = new HashMap<>();
         this.strats = new HashMap<>();
         this.score = new HashMap<>();
-        this.history = new HashMap<>();
     }
 
     public int getScore1() {
@@ -120,10 +118,7 @@ public class Context {
         this.score2 = 0;
     }
     
-    public void runMatch(MatchStmt match){
-        totalRounds = match.getRounds();
-        
-    }
+  
     public void setScore(Map<String, Integer> scoring){
         this.score = scoring;
     }

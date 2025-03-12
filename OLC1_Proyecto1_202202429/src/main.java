@@ -1,10 +1,10 @@
 
-import AST.IAST;
+import AST.Interpreter.IAST;
 import AST.Random.DeterministicRandomGenerator;
 import AST.Random.RandomGenerator;
 import Analyzer.Lexer;
 import Analyzer.Parser;
-import Interpreter.Context;
+import AST.Interpreter.Context;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.logging.Level;

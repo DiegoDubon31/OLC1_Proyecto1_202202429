@@ -4,9 +4,10 @@
  */
 package AST.Strategy;
 
-import AST.IAST;
+import AST.Interpreter.IAST;
+import AST.Random.DeterministicRandomGenerator;
 import AST.Random.RandomGenerator;
-import Interpreter.Context;
+import AST.Interpreter.Context;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +18,6 @@ public class Strategy implements IAST{
     private String ID;
     private String initial;
     private ArrayList<IAST> rules; 
-    private IAST elseBranch;
     private ArrayList<String> history;
     private boolean inUse;
     private RandomGenerator random;
@@ -26,9 +26,7 @@ public class Strategy implements IAST{
         this.ID = ID;
         this.initial = initial;
         this.rules = rules;
-        //this.elseBranch = elseBranch;
         this.history = new ArrayList<>();
-        //this.history.add(initial); 
         this.inUse = false;
     }
     
@@ -45,8 +43,8 @@ public class Strategy implements IAST{
         return random;
     }
 
-    public void setRandom(RandomGenerator random) {
-        this.random = random;
+    public void setRandom(int seed) {
+        this.random = DeterministicRandomGenerator.create(seed);
     }
     
     public boolean isInUse() {

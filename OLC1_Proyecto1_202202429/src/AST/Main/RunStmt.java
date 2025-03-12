@@ -4,10 +4,10 @@
  */
 package AST.Main;
 
-import AST.IAST;
+import AST.Interpreter.IAST;
 import AST.Match.MatchStmt;
 import AST.Strategy.Strategy;
-import Interpreter.Context;
+import AST.Interpreter.Context;
 import java.util.ArrayList;
 
 /**
@@ -60,6 +60,8 @@ public class RunStmt implements IAST{
 
                 Strategy strat1 = context.getStrat(id1);
                 Strategy strat2 = context.getStrat(id2);
+                strat1.setRandom(seed);
+                strat2.setRandom(seed);
                 strat1.setInUse(true);
                 strat2.setInUse(true);
                 ArrayList<IAST> ifs1;
@@ -201,3 +203,4 @@ public class RunStmt implements IAST{
     }
         
 }
+

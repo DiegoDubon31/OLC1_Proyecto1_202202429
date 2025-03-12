@@ -4,8 +4,8 @@
  */
 package AST.Match;
 
-import AST.IAST;
-import Interpreter.Context;
+import AST.Interpreter.IAST;
+import AST.Interpreter.Context;
 import java.util.HashMap;
 import java.util.Map;
 

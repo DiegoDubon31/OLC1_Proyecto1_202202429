@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package AST.Random;
+package AST.States;
 
-import AST.IAST;
+import AST.Interpreter.IAST;
 import AST.Strategy.Strategy;
-import Interpreter.Context;
+import AST.Interpreter.Context;
 
 /**
  *
@@ -20,9 +20,7 @@ public class Srandom implements IAST{
     @Override
     public Double interpret(Context context) {
         Strategy strat = context.getStrat(context.getActStrat());
-        RandomGenerator random = context.getRandom();
-        strat.setRandom(random);
-        
+
         return strat.getRandom().nextDouble();
     }
     
