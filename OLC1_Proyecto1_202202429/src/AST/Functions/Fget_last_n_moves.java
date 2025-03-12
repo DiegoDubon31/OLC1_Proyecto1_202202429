@@ -35,7 +35,7 @@ public class Fget_last_n_moves implements IAST{
                 if (iArg2>hist.size()) {
                     return null;
                 }else{
-                    for (int i = hist.size()-1; i >= hist.size()-iArg2; i--) {
+                    for (int i = hist.size()-iArg2; i < hist.size(); i++) {
                         decision = hist.get(i);
                         aux.add(decision);
                     }
@@ -49,7 +49,7 @@ public class Fget_last_n_moves implements IAST{
                 if (iArg2>hist.size()) {
                     return null;
                 }else{
-                    for (int i = hist.size()-1; i >= hist.size()-iArg2 ; i--) {
+                    for (int i =  hist.size()-iArg2; i < hist.size() ; i++) {
                         decision = hist.get(i);
                         aux.add(decision);
                     }
@@ -63,7 +63,7 @@ public class Fget_last_n_moves implements IAST{
             if (iArg2>arr.size()) {
                 return null;
             }else{
-                for (int i = arr.size()-1; i >= arr.size()-iArg2 ; i--) {
+                for (int i = arr.size()-iArg2; i < arr.size() ; i++) {
                     decision = (String) arr.get(i);
                     aux.add(decision);
                 }

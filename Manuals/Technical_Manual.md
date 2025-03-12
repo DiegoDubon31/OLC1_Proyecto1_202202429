@@ -96,7 +96,7 @@ In this part in the CUP file the AST is created, this is not an exact representa
 So as you can see in the **Parser.cup** file the productions start with S as the image and has 3 childs. This is the minimal representation of the AST because it can have **n** strategies,**n** matches, and **n** run statements. The conditions have IfStmt and this has BoolExpr and this has BoolCond this has two sides so it goes deep down, is just a basic representation. So please follow the productions and the non terminals and you will understand how the AST is created. This is **important** because by traversing the AST is that the program is interpreted. This is explained in the other section. 
 
 
-### **2. Interpreter**
+### **2. 📁Interpreter**
 Interprets AST nodes and executes strategies.
 Used the design pattern Interpreter this is my interface **IAST.java**:
 
@@ -358,7 +358,7 @@ public Void interpret(Context context) {
 2. Iterate round-by-round the rules of each strategy and get the decision.
 3. Calculate points, defections, cooperations and init again all the context. 
 
-## **Conclusion
+## **Conclusion**
 The Prisoner’s Dilemma Simulator is a robust software solution designed to analyze, process, and execute strategy-based matches using a custom scripting language (.cmp). The system integrates lexical and syntactical analysis with an interpreter-based execution model, ensuring accurate and structured processing of user-defined strategies.
 
 By leveraging JFlex and CUP, the program efficiently tokenizes and parses input files, constructing an Abstract Syntax Tree (AST) that serves as the foundation for strategy interpretation and match execution. Using the Interpreter design pattern, strategies are dynamically evaluated, allowing for flexible and scalable gameplay simulations.

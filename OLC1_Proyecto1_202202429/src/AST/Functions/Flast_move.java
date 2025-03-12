@@ -26,13 +26,13 @@ public class Flast_move implements IAST{
         if (arg1 instanceof String sArg) {
             if (sArg.equals("self_history")) {
                 ArrayList<String> hist = context.getSelfHistory();
-                return hist.getLast();
+                return hist.get(hist.size()-1);
             }else{
                 ArrayList<String> hist = context.getOpponentHistory();
-                return hist.getLast();
+                return hist.get(hist.size()-1);
             }
         }else if (arg1 instanceof ArrayList<?> arr ) {
-            String decision=(String) arr.getLast();
+            String decision=(String) arr.get(arr.size()-1);
             return decision;
                 
         }

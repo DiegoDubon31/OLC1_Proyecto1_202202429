@@ -107,7 +107,6 @@ public class RunStmt implements IAST{
                     for (IAST If1 : ifs1) {
                         result1 = (String)If1.interpret(context);
                         if (result1 != null) {
-                            strat1.addHistory(result1);
                             break;
                         }
 
@@ -119,12 +118,12 @@ public class RunStmt implements IAST{
                     for (IAST If2 : ifs2) {
                         result2 = (String)If2.interpret(context);
                         if (result2 != null) {
-                            strat2.addHistory(result2);
                             break;
                         }
 
                     }
-
+                    strat1.addHistory(result1);
+                    strat2.addHistory(result2);
                         if (result1.equals("C") && result2.equals("C")) {
                             context.setScore1(coop);
                             context.setScore2(coop);
