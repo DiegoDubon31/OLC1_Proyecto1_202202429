@@ -34,7 +34,7 @@ public class RunStmt implements IAST{
         if (seed>=0) {
             context.setRandom(seed);
             for (String matchId : matchIds) {
-                context.setOut("=== Match "+matchId+" ===\n");
+                context.setOut("\n=== Match "+matchId+" ===\n");
                 context.setOut("Configuration: \n");
                 match = context.getMatch(matchId);
                 id1 = match.getS1();
